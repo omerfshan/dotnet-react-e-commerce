@@ -1,32 +1,39 @@
-
-const products=[
-    {id:0,name:'Product1',price:1000,is_active:true},
-    {id:1,name:'Product2',price:2000,is_active:false},
-    {id:2,name:'Product1',price:3000,is_active:true},
-]
-
+import { useEffect, useState } from "react";
 
 export default function ProductList() {
-  return (
-  <>
-  {
-    
-  products.map(p=>(<Product key={p.id} products={p}/>))
-  }
-  </>
-  
+  const [products, setProducts] = useState([]);
 
-  )
+useEffect(() => {
+  fetch("http://localhost:5232/api/Products")
+    .then(res => {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    })
+    .then(data => setProducts(data))
+    .catch(err => console.log("FETCH ERROR:", err));
+}, []);
+
+
+  return (
+    <>
+      {
+        products.map(p => (
+          <Product key={p.id} products={p} />
+        ))
+      }
+    </>
+  );
 }
-function Product(props) 
-{
-    return (
-        <>
-        {       
-            (props.products.is_active)?
-                (<h3>{props.products.name}-{props.products.price}</h3>):
-                <p>bu ürün satışta değil</p>    
-        }
-        </>
-            )
+
+function Product({ products }) {
+  return (
+    <>
+      {
+        products.isActive
+          ? <h3>{products.name} - {products.price}</h3>
+          : <p>bu ürün satışta değil</p>
+      }
+    </>
+  );
 }
+
