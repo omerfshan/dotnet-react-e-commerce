@@ -1,18 +1,20 @@
 import type { IProduct } from "../Model/IProduct";
-import Product from "./Product";
 import Grid from "@mui/material/Grid";
+import ProductCard from "./ProductCard/ProductCard";
 
 interface Props {
   products: IProduct[];
-  setProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
+  onFavorite: () => void; 
 }
 
-export default function ProductList({ products }: Props) {
+
+export default function ProductList({ products,onFavorite }: Props) 
+ {
   return (
     <Grid container spacing={2}>
       {products.map((p) => (
         <Grid key={p.id} size={{ xs: 6, md: 4, lg: 3 }}>
-          <Product product={p} />
+            <ProductCard key={p.id} product={p} onFavorite={onFavorite} />
         </Grid>
       ))}
     </Grid>

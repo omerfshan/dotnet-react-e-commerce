@@ -1,14 +1,16 @@
 
 
 import { useEffect, useState } from 'react';
-import Header from './Header.tsx'
+
 import ProductList from './ProductList.tsx'
 import type { IProduct } from '../Model/IProduct.ts';
 import { Container, CssBaseline } from '@mui/material';
+import Header from './Header/Header.tsx';
 
 function App() {
   
 const [products, setProducts] = useState<IProduct[]>([]);
+const [favoriteCount, setFavoriteCount] = useState(0);
 
 
 
@@ -27,9 +29,15 @@ useEffect(() => {
   return (
     <>
     <CssBaseline/>
-    <Header/>
+   <Header favoriteCount={favoriteCount} />
+
     <Container>
-    <ProductList products={products} setProducts={setProducts} />
+   <ProductList
+  products={products}
+ 
+  onFavorite={() => setFavoriteCount((c) => c + 1)}
+/>
+
     </Container>
     </>
   )

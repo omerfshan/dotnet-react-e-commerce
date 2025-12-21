@@ -154,3 +154,4 @@ C:\Users\omerfaruksahan\Documents\Project\e-commerce-react-dotnet\e-commerce-Bac
 C:\Users\omerfaruksahan\Documents\Project\e-commerce-react-dotnet\e-commerce-Backend\commerce.API\bin\Debug\net9.0\runtimes\win-arm64\native\e_sqlite3.dll
 C:\Users\omerfaruksahan\Documents\Project\e-commerce-react-dotnet\e-commerce-Backend\commerce.API\bin\Debug\net9.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\omerfaruksahan\Documents\Project\e-commerce-react-dotnet\e-commerce-Backend\commerce.API\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\omerfaruksahan\Documents\Project\e-commerce-react-dotnet\e-commerce-Backend\commerce.API\bin\Debug\net9.0\commerce.API.staticwebassets.runtime.json

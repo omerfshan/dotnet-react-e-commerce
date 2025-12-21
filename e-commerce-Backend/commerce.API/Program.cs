@@ -10,16 +10,13 @@ builder.Services.AddControllers()
             System.Text.Json.JsonNamingPolicy.CamelCase;
     });
 
-
-// ✅ CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy
-            .WithOrigins("http://localhost:5173") // Vite
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -40,10 +37,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+
+
+app.UseStaticFiles();
+
 app.UseRouting();
 
-// ✅ CORS mutlaka Routing'den sonra, MapControllers'tan önce
 app.UseCors("CorsPolicy");
+
+app.UseAuthorization();
 
 app.MapControllers();
 
