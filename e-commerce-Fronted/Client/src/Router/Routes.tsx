@@ -3,6 +3,8 @@ import App from "../Companents/App";
 import HomePage from "../page/HomePage";
 import AboutPage from "../page/AboutPage";
 import ContactPage from "../page/ContactPage";
+import CatalogPage from "../page/CatalogPage";
+import ProductAbout from "../page/ProductAbout";
 
 export const router = createBrowserRouter([
   {
@@ -12,6 +14,12 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
       { path: "contact", element: <ContactPage /> },
+
+      { path: "catalog", element: <CatalogPage /> },          // tüm ürünler
+      { path: "category/:id", element: <CatalogPage /> },      // kategoriye göre
+
+      { path: "catalog/:id", element: <ProductAbout /> },      // ürün detayı
     ],
   },
 ]);
+

@@ -32,7 +32,8 @@ export default function Header({ favoriteCount }: Props) {
         // backend: { id, name }  -> frontend: { label }
         const mapped: ICatagory[] = data.map((c: any) => ({
           label: c.name,
-          // isNew backend'ten gelmiyor, gerekirse burada verirsin
+          isNew:c.isNew,
+          id:c.id
         }));
 
 

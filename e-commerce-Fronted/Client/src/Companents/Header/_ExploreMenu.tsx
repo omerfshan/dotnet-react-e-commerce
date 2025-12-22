@@ -1,10 +1,11 @@
 import { Box, Chip, Collapse } from "@mui/material";
-import type { NavItem } from "./types";
+import type { ICatagory } from "../../Model/ICatagory";
+
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  categories: NavItem[];
+  categories: ICatagory[];
   newBadge: string;
 };
 

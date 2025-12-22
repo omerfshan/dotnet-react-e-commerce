@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import type { ICatagory } from "../../Model/ICatagory";
+import { NavLink } from "react-router-dom";
 
 
 type Props = {
@@ -37,34 +38,41 @@ export default function CategoryBar({
           >
             KEŞFET
           </Button>
-          <Chip label="Yeni" size="small" sx={{ bgcolor: newBadge, color: "#fff" }} />
+          {/* <Chip label="Yeni" size="small" sx={{ bgcolor: newBadge, color: "#fff" }} /> */}
         </Box>
 
         {/* KATEGORİLER MD+ */}
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
-          {categories.map((c) => (
-            <Box
-              key={c.label}
-              sx={{
-                fontWeight: 800,
-                cursor: "pointer",
-                borderBottom: "2px solid transparent",
-                "&:hover": {
-                  color: primaryHover,
-                  borderBottomColor: primaryHover,
-                },
-              }}
-            >
-              {c.label}
-              {c.isNew && (
-                <Chip
-                  label="Yeni"
-                  size="small"
-                  sx={{ ml: 0.5, bgcolor: newBadge, color: "#fff" }}
-                />
-              )}
-            </Box>
-          ))}
+         {categories.map((c) => (
+  <NavLink
+    key={c.id}
+    to={`/category/${c.id}`}
+    style={{ textDecoration: "none", color: "inherit" }}
+  >
+    <Box
+      sx={{
+        fontWeight: 800,
+        cursor: "pointer",
+        borderBottom: "2px solid transparent",
+        "&:hover": {
+          color: primaryHover,
+          borderBottomColor: primaryHover,
+        },
+      }}
+    >
+      {c.label}
+      {c.isNew && (
+        <Chip
+          label="Yeni"
+          size="small"
+          sx={{ ml: 0.5, bgcolor: newBadge, color: "#fff" }}
+        />
+      )}
+    </Box>
+  </NavLink>
+))}
+
+        
         </Box>
       </Toolbar>
     </Box>
