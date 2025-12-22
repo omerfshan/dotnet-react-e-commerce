@@ -1,6 +1,6 @@
 using API.Data;
-using API.Entity;
 using API.Dto;
+using API.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,88 +17,197 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/products
+        // GET: api/products  ✅ kategorileriyle birlikte
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var products = await _context.Products.AsNoTracking().ToListAsync();
+            var products = await _context.Products
+                .AsNoTracking()
+                .Include(p => p.ProductCategories)
+                    .ThenInclude(pc => pc.Category)
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.Price,
+                    p.IsActive,
+                    p.ImageUrl,
+                    p.Stock,
+                    Categories = p.ProductCategories.Select(pc => new
+                    {
+                        pc.CategoryId,
+                        pc.Category.Name
+                    })
+                })
+                .ToListAsync();
+
             return Ok(products);
         }
 
-        // GET: api/products/5
+        // GET: api/products/5 ✅ kategorileriyle birlikte
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var product = await _context.Products.AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var product = await _context.Products
+                .AsNoTracking()
+                .Include(p => p.ProductCategories)
+                    .ThenInclude(pc => pc.Category)
+                .Where(p => p.Id == id)
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.Price,
+                    p.IsActive,
+                    p.ImageUrl,
+                    p.Stock,
+                    Categories = p.ProductCategories.Select(pc => new
+                    {
+                        pc.CategoryId,
+                        pc.Category.Name
+                    })
+                })
+                .FirstOrDefaultAsync();
 
             if (product is null) return NotFound();
             return Ok(product);
         }
 
-        // POST: api/products
+        // POST: api/products ✅ CategoryIds ile create
         [HttpPost]
-        public async Task<ActionResult<Product>> Create([FromBody] Product input)
+        public async Task<IActionResult> Create([FromBody] ProductCreateUpdateDto dto)
         {
-            // Basit validasyon
-            if (string.IsNullOrWhiteSpace(input.Name))
+            if (string.IsNullOrWhiteSpace(dto.Name))
                 return BadRequest("Name zorunlu.");
 
-            // Id client'tan gelmesin
-            input.Id = 0;
+            var uniqueIds = dto.CategoryIds.Distinct().ToList();
 
-            _context.Products.Add(input);
+            // kategori id'leri geçerli mi?
+            var validCategoryIds = await _context.Categories
+                .Where(c => uniqueIds.Contains(c.Id))
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            if (validCategoryIds.Count != uniqueIds.Count)
+                return BadRequest("Geçersiz categoryId var.");
+
+            var product = new Product
+            {
+                Name = dto.Name.Trim(),
+                Description = dto.Description,
+                Price = dto.Price,
+                IsActive = dto.IsActive,
+                ImageUrl = dto.ImageUrl,
+                Stock = dto.Stock,
+                ProductCategories = validCategoryIds.Select(cid => new ProductCategory
+                {
+                    CategoryId = cid
+                }).ToList()
+            };
+
+            _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = input.Id }, input);
+            return CreatedAtAction(nameof(GetById), new { id = product.Id }, new { product.Id });
         }
 
-        // PUT: api/products/5  (tam güncelleme)
+        // PUT: api/products/5 ✅ tam update + kategorileri resetle
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Product input)
+        public async Task<IActionResult> Update(int id, [FromBody] ProductCreateUpdateDto dto)
         {
-            if (id != input.Id && input.Id != 0)
-                return BadRequest("Id uyuşmuyor.");
+            var product = await _context.Products
+                .Include(p => p.ProductCategories)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product is null) return NotFound();
 
-            // Tam update
-            product.Name = input.Name;
-            product.Description = input.Description;
-            product.Price = input.Price;
-            product.IsActive = input.IsActive;
-            product.ImageUrl = input.ImageUrl;
-            product.Stock = input.Stock;
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                return BadRequest("Name zorunlu.");
+
+            var uniqueIds = dto.CategoryIds.Distinct().ToList();
+
+            var validCategoryIds = await _context.Categories
+                .Where(c => uniqueIds.Contains(c.Id))
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            if (validCategoryIds.Count != uniqueIds.Count)
+                return BadRequest("Geçersiz categoryId var.");
+
+            // alanlar
+            product.Name = dto.Name.Trim();
+            product.Description = dto.Description;
+            product.Price = dto.Price;
+            product.IsActive = dto.IsActive;
+            product.ImageUrl = dto.ImageUrl;
+            product.Stock = dto.Stock;
+
+            // join reset
+            product.ProductCategories.Clear();
+            foreach (var cid in validCategoryIds)
+            {
+                product.ProductCategories.Add(new ProductCategory
+                {
+                    ProductId = product.Id,
+                    CategoryId = cid
+                });
+            }
 
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        // PATCH: api/products/5  (kısmi güncelleme)
+        // PATCH: api/products/5 ✅ kısmi update + isterse kategori güncelle
         [HttpPatch("{id:int}")]
-      
-public async Task<IActionResult> Patch(int id, ProductPatchDto dto)
-{
-    var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
-    if (product == null) return NotFound();
+        public async Task<IActionResult> Patch(int id, [FromBody] ProductPatchDto dto)
+        {
+            var product = await _context.Products
+                .Include(p => p.ProductCategories)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-    if (dto.Name != null)
-        product.Name = dto.Name;
+            if (product is null) return NotFound();
 
-    if (dto.Price.HasValue)
-        product.Price = dto.Price.Value;
+            if (dto.Name != null)
+                product.Name = dto.Name.Trim();
 
-    if (dto.IsActive.HasValue)
-        product.IsActive = dto.IsActive.Value;
-   
-    if (dto.Stock.HasValue)
-        product.Stock = dto.Stock.Value;
+            if (dto.Price.HasValue)
+                product.Price = dto.Price.Value;
 
-    await _context.SaveChangesAsync();
-    return NoContent();
-}
+            if (dto.IsActive.HasValue)
+                product.IsActive = dto.IsActive.Value;
 
+            if (dto.Stock.HasValue)
+                product.Stock = dto.Stock.Value;
+
+            // kategori patch
+            if (dto.CategoryIds != null)
+            {
+                var uniqueIds = dto.CategoryIds.Distinct().ToList();
+
+                var validCategoryIds = await _context.Categories
+                    .Where(c => uniqueIds.Contains(c.Id))
+                    .Select(c => c.Id)
+                    .ToListAsync();
+
+                if (validCategoryIds.Count != uniqueIds.Count)
+                    return BadRequest("Geçersiz categoryId var.");
+
+                product.ProductCategories.Clear();
+                foreach (var cid in validCategoryIds)
+                {
+                    product.ProductCategories.Add(new ProductCategory
+                    {
+                        ProductId = product.Id,
+                        CategoryId = cid
+                    });
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
 
         // DELETE: api/products/5
         [HttpDelete("{id:int}")]

@@ -5,10 +5,11 @@ import {
   Chip,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import type { NavItem } from "./types";
+import type { ICatagory } from "../../Model/ICatagory";
+
 
 type Props = {
-  categories: NavItem[];
+  categories: ICatagory[];
   openExplore: boolean;
   setOpenExplore: (v: boolean) => void;
   primary: string;
