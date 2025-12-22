@@ -14,6 +14,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { NavLink } from "react-router-dom";
 
 type Props = {
   primary: string;
@@ -36,6 +37,8 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props)  {
       >
         {/* LOGO */}
         <Typography
+        component={NavLink}
+        to={"/"}
           sx={{
             fontWeight: 900,
             fontSize: { xs: 30, md: 38 },
@@ -44,6 +47,8 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props)  {
             cursor: "pointer",
             flexShrink: 0,
             order: { xs: 1, md: 0 },
+             textDecoration: "none",
+          
           }}
         >
           NOVA

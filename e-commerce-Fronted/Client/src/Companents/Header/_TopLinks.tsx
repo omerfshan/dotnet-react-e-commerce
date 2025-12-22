@@ -1,7 +1,11 @@
 import { Box, Button } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 export default function TopLinks() {
-  const topLinks = ["Kampanyalar", "Satıcı Ol", "Hakkımızda", "Destek"];
+  const topLinks = [
+    { label: "Hakkımızda", path: "/about" },
+    { label: "İletişim", path: "/contact" },
+  ];
 
   return (
     <Box
@@ -23,7 +27,9 @@ export default function TopLinks() {
       >
         {topLinks.map((t) => (
           <Button
-            key={t}
+            key={t.path}
+            component={NavLink}
+            to={t.path}
             sx={{
               fontSize: 12,
               color: "#6B7280",
@@ -31,9 +37,14 @@ export default function TopLinks() {
               minWidth: "auto",
               py: 0,
               lineHeight: 1,
+
+              "&.active": {
+                color: "#111827",
+                fontWeight: 700,
+              },
             }}
           >
-            {t}
+            {t.label}
           </Button>
         ))}
       </Box>

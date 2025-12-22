@@ -43,34 +43,42 @@ export default function CategoryBar({
 
         {/* KATEGORİLER MD+ */}
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
-         {categories.map((c) => (
+        {categories.map((c) => (
   <NavLink
     key={c.id}
     to={`/category/${c.id}`}
-    style={{ textDecoration: "none", color: "inherit" }}
+    style={() => ({
+      textDecoration: "none",
+      color: "inherit",
+    })}
   >
-    <Box
-      sx={{
-        fontWeight: 800,
-        cursor: "pointer",
-        borderBottom: "2px solid transparent",
-        "&:hover": {
-          color: primaryHover,
-          borderBottomColor: primaryHover,
-        },
-      }}
-    >
-      {c.label}
-      {c.isNew && (
-        <Chip
-          label="Yeni"
-          size="small"
-          sx={{ ml: 0.5, bgcolor: newBadge, color: "#fff" }}
-        />
-      )}
-    </Box>
+    {({ isActive }) => (
+      <Box
+        sx={{
+          fontWeight: 800,
+          cursor: "pointer",
+          borderBottom: "2px solid",
+          borderBottomColor: isActive ? primary : "transparent",
+          color: isActive ? primary : "inherit",
+          "&:hover": {
+            color: primaryHover,
+            borderBottomColor: primaryHover,
+          },
+        }}
+      >
+        {c.label}
+        {c.isNew && (
+          <Chip
+            label="Yeni"
+            size="small"
+            sx={{ ml: 0.5, bgcolor: newBadge, color: "#fff" }}
+          />
+        )}
+      </Box>
+    )}
   </NavLink>
 ))}
+
 
         
         </Box>
