@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import ProductList from "../Companents/ProductList";
 import type { IProduct } from "../Model/IProduct";
+import requests from "../Api/Api";
 
 export default function HomePage() {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [favoriteCount, setFavoriteCount] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:5232/api/Products")
-      .then(res => res.json())
+    requests.Catalog.list()
       .then(data => setProducts(data))
       .catch(err => console.log(err));
   }, []);
