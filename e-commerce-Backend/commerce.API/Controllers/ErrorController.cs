@@ -10,7 +10,7 @@ public class ErrorController:ControllerBase
     [HttpGet("not-found")]
     public IActionResult NotFoundError()
     {
-        return NotFound();//404
+        return NotFound();
     }
     [HttpGet("bad-request")]
     public IActionResult BadRequestError()

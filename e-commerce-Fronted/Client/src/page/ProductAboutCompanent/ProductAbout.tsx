@@ -9,6 +9,7 @@ import ProductNotFound from "./Companents/ProductNotFound";
 import ProductGalleryPanel from "./Companents/ProductGalleryPanel";
 import ProductBuyPanel from "./Companents/ProductBuyPanel";
 import ProductDescriptionPanel from "./Companents/ProductDescriptionPanel";
+import requests from "../../Api/Api";
 
 
 
@@ -32,16 +33,9 @@ export default function ProductAboutPage() {
     if (!id) return;
 
     setLoading(true);
-    fetch(`http://localhost:5232/api/Products/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.json();
-      })
+
+    requests.Catalog.product_Details(Number(id))
       .then((data: IProduct) => setProduct(data))
-      .catch((err) => {
-        console.log(err);
-        setProduct(null);
-      })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -94,7 +88,7 @@ export default function ProductAboutPage() {
   }, []);
 
   if (loading) return <ProductLoading />;
-  if (!product) return <ProductNotFound id={id} />;
+  if (!product) return null;
 
   return (
     <Box sx={{ bgcolor: colors.softBg, minHeight: "100vh", py: { xs: 2, md: 3 } }}>

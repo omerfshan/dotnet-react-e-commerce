@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductList from "../Companents/ProductList";
 import type { IProduct } from "../Model/IProduct";
-import { requestFormReset } from "react-dom";
+
 import requests from "../Api/Api";
 
 export default function CatalogPage() {
@@ -12,7 +12,7 @@ export default function CatalogPage() {
 
  useEffect(() => {
   const req = id
-    ? requests.Catalog.details(Number(id))
+    ? requests.Catalog.Category_details(Number(id))
     : requests.Catalog.list();
 
   req

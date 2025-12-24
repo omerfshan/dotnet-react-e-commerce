@@ -1,6 +1,36 @@
-import axios, { type AxiosResponse } from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 
 axios.defaults.baseURL="http://localhost:5232/api/"
+axios.interceptors.response.use(response=>{
+  return response;
+},(error:AxiosError)=>{
+  console.log(error.response)
+  const {data,status}=error.response as AxiosResponse;
+  switch (status) {
+  case 400:
+    toast.error(data.title);
+    break;
+
+  case 401:
+    toast.error(data.title);
+    break;
+
+  case 404:
+    toast.error(data.title);
+    break;
+
+  case 500:
+    toast.error(data.title);
+    break;
+  default:
+  toast.error(data.title);
+  break;
+
+}
+
+ return Promise.reject(error.response) 
+})
 const queries = {
   get: (url: string) =>
     axios.get(url).then((response: AxiosResponse) => response.data),
@@ -17,7 +47,8 @@ const queries = {
 
 const Catalog = {
   list: () => queries.get("Products"),
-  details: (id: number) => queries.get(`Categories/${id}`),
+  product_Details:(id:number)=>queries.get(`Products/${id}`),
+  Category_details: (id: number) => queries.get(`Categories/${id}`)
 };
 
 // ❗️TEK DÜZELTME BURASI

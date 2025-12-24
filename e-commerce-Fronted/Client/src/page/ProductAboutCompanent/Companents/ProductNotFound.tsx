@@ -15,7 +15,7 @@ export default function ProductNotFound({ id }: { id?: string }) {
           }}
         >
           <Typography sx={{ fontWeight: 900, fontSize: 18 }}>Ürün bulunamadı.</Typography>
-          <Typography sx={{ mt: 1, color: "rgba(0,0,0,0.65)" }}>ID: {id}</Typography>
+        
         </Paper>
       </Box>
     </Box>
