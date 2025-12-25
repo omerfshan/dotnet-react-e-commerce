@@ -50,10 +50,20 @@ const Catalog = {
   product_Details:(id:number)=>queries.get(`Products/${id}`),
   Category_details: (id: number) => queries.get(`Categories/${id}`)
 };
+const Errors = {
+  getNotFound: () => queries.get("/error/not-found"),
+  getBadRequest: () => queries.get("/error/bad-request"),
+  getUnauthorized: () => queries.get("/error/unauthorized"),
+  getServerError: () => queries.get("/error/server-error"),
+  getValidationError: () => queries.get("/error/validation-error"),
+};
+
+
 
 // ❗️TEK DÜZELTME BURASI
 const requests = {
   Catalog,
+  Errors
 };
 
 export default requests;

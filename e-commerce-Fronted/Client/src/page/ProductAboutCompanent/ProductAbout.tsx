@@ -5,7 +5,7 @@ import { Box, Grid } from "@mui/material";
 import colors from "../../theme/color";
 import type { IProduct } from "../../Model/IProduct";
 import ProductLoading from "./Companents/ProductLoading";
-import ProductNotFound from "./Companents/ProductNotFound";
+
 import ProductGalleryPanel from "./Companents/ProductGalleryPanel";
 import ProductBuyPanel from "./Companents/ProductBuyPanel";
 import ProductDescriptionPanel from "./Companents/ProductDescriptionPanel";

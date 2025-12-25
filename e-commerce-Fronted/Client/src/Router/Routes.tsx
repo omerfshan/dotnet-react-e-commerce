@@ -5,13 +5,14 @@ import AboutPage from "../page/AboutPage";
 import ContactPage from "../page/ContactPage";
 import CatalogPage from "../page/CatalogPage";
 import ProductAbout from "../page/ProductAboutCompanent/ProductAbout";
+import Example from "../example";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <Example /> },
       { path: "about", element: <AboutPage /> },
       { path: "contact", element: <ContactPage /> },
 
