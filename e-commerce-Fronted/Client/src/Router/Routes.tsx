@@ -1,26 +1,49 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../Companents/App";
-import HomePage from "../page/HomePage";
 import AboutPage from "../page/AboutPage";
 import ContactPage from "../page/ContactPage";
 import CatalogPage from "../page/CatalogPage";
 import ProductAbout from "../page/ProductAboutCompanent/ProductAbout";
+import NotFound from "../page/ErrorPages/NotFound";
+import BadRequest from "../page/ErrorPages/BadRequest";
+import Unauthorized from "../page/ErrorPages/Unauthorized";
+import ValidationError from "../page/ErrorPages/ValidationError";
+import ServerError from "../page/ErrorPages/ServerError"
+import HomePage from "../page/HomePage";
 import Example from "../example";
+
+
+// ✅ Error Pages (oluşturduğun dosya path'lerine göre importları düzelt)
+
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <Example /> },
+      // home
+      { index: true, element: <HomePage /> },
+
+      // pages
       { path: "about", element: <AboutPage /> },
       { path: "contact", element: <ContactPage /> },
 
-      { path: "catalog", element: <CatalogPage /> },          // tüm ürünler
-      { path: "category/:id", element: <CatalogPage /> },      // kategoriye göre
+      // catalog
+      { path: "catalog", element: <CatalogPage /> },      // tüm ürünler
+      { path: "category/:id", element: <CatalogPage /> }, // kategoriye göre
 
-      { path: "catalog/:id", element: <ProductAbout /> },      // ürün detayı
+      // product detail
+      { path: "catalog/:id", element: <ProductAbout /> },
+
+      // ✅ error routes (interceptor bunlara navigate edecek)
+      { path: "not-found", element: <NotFound /> },
+      { path: "bad-request", element: <BadRequest /> },
+      { path: "unauthorized", element: <Unauthorized /> },
+      { path: "validation-error", element: <ValidationError /> },
+      { path: "server-error", element: <ServerError /> },
+
+      // ✅ her şeyi yakala (404)
+      { path: "*", element: <NotFound /> },
     ],
   },
 ]);
-

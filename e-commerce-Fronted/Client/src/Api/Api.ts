@@ -1,36 +1,67 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
+import { router } from "../Router/Routes";
 import { toast } from "react-toastify";
 
-axios.defaults.baseURL="http://localhost:5232/api/"
-axios.interceptors.response.use(response=>{
-  return response;
-},(error:AxiosError)=>{
-  console.log(error.response)
-  const {data,status}=error.response as AxiosResponse;
-  switch (status) {
-  case 400:
-    toast.error(data.title);
-    break;
+axios.defaults.baseURL = "http://localhost:5232/api/";
 
-  case 401:
-    toast.error(data.title);
-    break;
+axios.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    const res = error.response as AxiosResponse | undefined;
 
-  case 404:
-    toast.error(data.title);
-    break;
+    if (!res) {
+      router.navigate("/server-error", {
+        state: {
+          status: 0,
+          error: { title: "Sunucuya bağlanılamadı", detail: error.message },
+        },
+      });
+      return Promise.reject(error);
+    }
 
-  case 500:
-    toast.error(data.title);
-    break;
-  default:
-  toast.error(data.title);
-  break;
+    const { data, status } = res;
 
-}
+    // ✅ 422 → SAYFAYA GİTME, TOAST YOK, ARRAY FIRLAT
+    if (status === 422 && (data as any)?.errors) {
+      const errors = (data as any).errors as Record<string, string[]>;
+      const validationErrors: string[] = [];
 
- return Promise.reject(error.response) 
-})
+      for (const key in errors) {
+        if (errors[key]?.length) validationErrors.push(...errors[key]);
+      }
+
+      return Promise.reject(validationErrors);
+    }
+
+    // ✅ 400 → SADECE TOAST
+    if (status === 400) {
+      toast.error((data as any)?.title || "Bad Request");
+      return Promise.reject(res);
+    }
+
+    // ✅ DİĞERLERİ ROUTE
+    switch (status) {
+      case 401:
+        router.navigate("/unauthorized", { state: { error: data, status } });
+        break;
+
+      case 404:
+        router.navigate("/not-found", { state: { error: data, status } });
+        break;
+
+      case 500:
+        router.navigate("/server-error", { state: { error: data, status } });
+        break;
+
+      default:
+        // diğer statuslar için hiçbir şey yapma (redirect istemiyorsun)
+        break;
+    }
+
+    return Promise.reject(res);
+  }
+);
+
 const queries = {
   get: (url: string) =>
     axios.get(url).then((response: AxiosResponse) => response.data),
@@ -47,23 +78,22 @@ const queries = {
 
 const Catalog = {
   list: () => queries.get("Products"),
-  product_Details:(id:number)=>queries.get(`Products/${id}`),
-  Category_details: (id: number) => queries.get(`Categories/${id}`)
+  product_Details: (id: number) => queries.get(`Products/${id}`),
+  Category_details: (id: number) => queries.get(`Categories/${id}`),
 };
+
 const Errors = {
-  getNotFound: () => queries.get("/error/not-found"),
-  getBadRequest: () => queries.get("/error/bad-request"),
-  getUnauthorized: () => queries.get("/error/unauthorized"),
-  getServerError: () => queries.get("/error/server-error"),
-  getValidationError: () => queries.get("/error/validation-error"),
+  getNotFound: () => queries.get("Error/not-found"),
+  getBadRequest: () => queries.get("Error/bad-request"),
+  getUnauthorized: () => queries.get("Error/unauthorized"),
+  getServerError: () => queries.get("Error/server-error"),
+  getValidationError: () => queries.get("Error/validation-error"),
 };
-
-
 
 // ❗️TEK DÜZELTME BURASI
 const requests = {
   Catalog,
-  Errors
+  Errors,
 };
 
 export default requests;

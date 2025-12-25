@@ -2,16 +2,16 @@ import { IconButton, Chip } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import colors from "../../theme/color";
 
-type Props = {
-  onFavorite: () => void;
-};
+// type Props = {
+  
+// };
 
-export default function ProductActions({ onFavorite }: Props) {
+export default function ProductActions() {
 
   return (
     <>
       {/* FAVORI */}
-      <IconButton   onClick={onFavorite}
+      <IconButton   
         sx={{
           position: "absolute",
           top: 8,

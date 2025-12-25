@@ -5,7 +5,7 @@ import requests from "../Api/Api";
 
 export default function HomePage() {
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [favoriteCount, setFavoriteCount] = useState(0);
+  
 
   useEffect(() => {
     requests.Catalog.list()
@@ -16,7 +16,7 @@ export default function HomePage() {
   return (
     <ProductList
       products={products}
-      onFavorite={() => setFavoriteCount(c => c + 1)}
+     
     />
   );
 }

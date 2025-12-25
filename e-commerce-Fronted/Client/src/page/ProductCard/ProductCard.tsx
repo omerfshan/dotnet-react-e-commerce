@@ -8,10 +8,10 @@ import type { IProduct } from "../../Model/IProduct";
 
 type Props = {
   product: IProduct;
-  onFavorite: () => void;
+ 
 };
 
-export default function ProductCard({ product, onFavorite }: Props) {
+export default function ProductCard({ product, }: Props) {
   const navigate = useNavigate();
 
   if (!product.isActive) return null;
@@ -35,7 +35,7 @@ export default function ProductCard({ product, onFavorite }: Props) {
     >
       {/* ⚠️ FAVORI BUTONU TIKLANINCA SAYFAYA GİTMESİN */}
       <div onClick={(e) => e.stopPropagation()}>
-        <ProductActions onFavorite={onFavorite} />
+        <ProductActions  />
       </div>
 
       <ProductImage imageUrl={product.imageUrl} name={product.name} />

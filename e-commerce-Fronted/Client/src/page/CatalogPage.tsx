@@ -8,7 +8,7 @@ import requests from "../Api/Api";
 export default function CatalogPage() {
   const { id } = useParams(); // /category/:id
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [favoriteCount, setFavoriteCount] = useState(0);
+
 
  useEffect(() => {
   const req = id
@@ -24,7 +24,7 @@ export default function CatalogPage() {
   return (
     <ProductList
       products={products}
-      onFavorite={() => setFavoriteCount((c) => c + 1)}
+    
     />
   );
 }
