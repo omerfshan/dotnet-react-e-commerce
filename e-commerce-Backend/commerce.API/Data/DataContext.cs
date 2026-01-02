@@ -8,6 +8,7 @@ namespace API.Data
         public DbSet<Product> Products => Set<Product>();
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
+        public DbSet<Cart> Carts => Set<Cart>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
