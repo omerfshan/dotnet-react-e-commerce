@@ -12,6 +12,8 @@ import ServerError from "../page/ErrorPages/ServerError"
 import HomePage from "../page/HomePage";
 import Example from "../example";
 
+import CartPage from "../page/Cart/CartPage";
+
 
 // ✅ Error Pages (oluşturduğun dosya path'lerine göre importları düzelt)
 
@@ -34,7 +36,10 @@ export const router = createBrowserRouter([
 
       // product detail
       { path: "catalog/:id", element: <ProductAbout /> },
+      
+      {path:"cart",element:<CartPage/>},
 
+      {path:"errorPage",element:<Example/>},
       // ✅ error routes (interceptor bunlara navigate edecek)
       { path: "not-found", element: <NotFound /> },
       { path: "bad-request", element: <BadRequest /> },

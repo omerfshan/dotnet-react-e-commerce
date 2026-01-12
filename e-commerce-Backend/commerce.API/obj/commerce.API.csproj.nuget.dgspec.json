@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\omerfaruksahan\\Documents\\Project\\e-commerce-react-dotnet\\e-commerce-Backend\\commerce.API\\commerce.API.csproj": {}
+    "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/commerce.API/commerce.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\omerfaruksahan\\Documents\\Project\\e-commerce-react-dotnet\\e-commerce-Backend\\commerce.API\\commerce.API.csproj": {
+    "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/commerce.API/commerce.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\omerfaruksahan\\Documents\\Project\\e-commerce-react-dotnet\\e-commerce-Backend\\commerce.API\\commerce.API.csproj",
+        "projectUniqueName": "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/commerce.API/commerce.API.csproj",
         "projectName": "commerce.API",
-        "projectPath": "C:\\Users\\omerfaruksahan\\Documents\\Project\\e-commerce-react-dotnet\\e-commerce-Backend\\commerce.API\\commerce.API.csproj",
-        "packagesPath": "C:\\Users\\omerfaruksahan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\omerfaruksahan\\Documents\\Project\\e-commerce-react-dotnet\\e-commerce-Backend\\commerce.API\\obj\\",
+        "projectPath": "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/commerce.API/commerce.API.csproj",
+        "packagesPath": "/Users/omerfaruksahan/.nuget/packages/",
+        "outputPath": "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/commerce.API/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\omerfaruksahan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/omerfaruksahan/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -44,6 +44,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.1, )"
@@ -92,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

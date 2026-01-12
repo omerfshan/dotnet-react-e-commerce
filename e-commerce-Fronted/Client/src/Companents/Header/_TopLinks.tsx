@@ -5,6 +5,7 @@ export default function TopLinks() {
   const topLinks = [
     { label: "Hakkımızda", path: "/about" },
     { label: "İletişim", path: "/contact" },
+    {label:"Error",path:"/errorPage"}
   ];
 
   return (

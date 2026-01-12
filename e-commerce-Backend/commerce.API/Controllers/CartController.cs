@@ -1,8 +1,9 @@
 using API.Data;
+using API.Dto;
 using API.Entity;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
 
 namespace API.Controllers;
 
@@ -11,73 +12,90 @@ namespace API.Controllers;
 public class CartController : ControllerBase
 {
     private readonly DataContext _context;
+    private readonly IMapper _mapper;
 
-    public CartController(DataContext context)
+    public CartController(DataContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    // GET: api/cart?customerId=omer
+    // GET: api/cart
     [HttpGet]
-    public async Task<ActionResult<Cart>> GetCart()
+    public async Task<ActionResult<CartDto>> GetCart()
     {
         var cart = await GetOrCreate();
 
-        return cart;
+        return _mapper.Map<CartDto>(cart);
     }
+
+    // POST: api/cart?productId=1&quantity=2
     [HttpPost]
-    public async Task<ActionResult> AddItemToCart(int productId,int quantity)
+    public async Task<ActionResult> AddItemToCart(int productId, int quantity)
     {
-        var cart =await GetOrCreate();
-        var product=await _context.Products.FirstOrDefaultAsync(i=>i.Id == productId);
-        if(product==null)
-        return NotFound();
-        cart.AddItem(productId,quantity);
-        var result=await _context.SaveChangesAsync()>0;
+        var cart = await GetOrCreate();
+
+        var product = await _context.Products
+            .FirstOrDefaultAsync(i => i.Id == productId);
+
+        if (product == null)
+            return NotFound();
+
+        cart.AddItem(productId, quantity);
+
+        var result = await _context.SaveChangesAsync() > 0;
+
         if (result)
         {
-            return CreatedAtAction(nameof(GetCart),cart);
+            var cartDto = _mapper.Map<CartDto>(cart);
+            return CreatedAtAction(nameof(GetCart), cartDto);
         }
-        return BadRequest(new ProblemDetails { Title="The product can not be added to cart"});
+
+        return BadRequest(new ProblemDetails { Title = "The product can not be added to cart" });
     }
-    // DELETE: api/cart/{id}
-[HttpDelete]
-public async Task<IActionResult> DeleteFromCart(int ProductId,int quantity)
-{
-    var cart = await GetOrCreate();
 
-    cart.RemoveItem(ProductId,quantity);
+    // DELETE: api/cart?productId=1&quantity=1
+    [HttpDelete]
+    public async Task<IActionResult> DeleteFromCart(int productId, int quantity)
+    {
+        var cart = await GetOrCreate();
 
-    _context.Carts.Remove(cart);
-    var result= await _context.SaveChangesAsync()>0;
-    if(result)
-    return Ok();
-    return  BadRequest(new ProblemDetails { Title="problem removing item "}) ;
-}
+        cart.RemoveItem(productId, quantity);
+
+        var result = await _context.SaveChangesAsync() > 0;
+
+        if (result)
+            return Ok();
+
+        return BadRequest(new ProblemDetails { Title = "problem removing item" });
+    }
 
     private async Task<Cart> GetOrCreate()
     {
-         var cart = await _context.Carts
+        var customerId = Request.Cookies["customerId"];
+
+        var cart = await _context.Carts
             .Include(c => c.CartItems)
             .ThenInclude(ci => ci.Product)
-            .FirstOrDefaultAsync(c => c.CustomerId == Request.Cookies["customerId"]);
-        if(cart is null)
+            .FirstOrDefaultAsync(c => c.CustomerId == customerId);
+
+        if (cart is null)
         {
-            var customerId=Guid.NewGuid().ToString();
-            var CookiesOptions=new CookieOptions
+            var newCustomerId = Guid.NewGuid().ToString();
+
+            var cookiesOptions = new CookieOptions
             {
-                Expires=DateTime.Now.AddMonths(1),
-                IsEssential=true,
+                Expires = DateTime.Now.AddMonths(1),
+                IsEssential = true
             };
-            Response.Cookies.Append("customerId",customerId,CookiesOptions);
-            cart =new Cart{CustomerId=customerId};
+
+            Response.Cookies.Append("customerId", newCustomerId, cookiesOptions);
+
+            cart = new Cart { CustomerId = newCustomerId };
             _context.Carts.Add(cart);
             await _context.SaveChangesAsync();
         }
-        return cart;
-     
-        
 
-    
+        return cart;
     }
 }

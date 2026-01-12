@@ -5,6 +5,7 @@ import ProductActions from "./_ProductActions";
 import ProductImage from "./_ProductImage";
 import ProductInfo from "./_ProductInfo";
 import type { IProduct } from "../../Model/IProduct";
+import AddToCartButton from "./_AddToCartButton";
 
 type Props = {
   product: IProduct;
@@ -40,6 +41,7 @@ export default function ProductCard({ product, }: Props) {
 
       <ProductImage imageUrl={product.imageUrl} name={product.name} />
       <ProductInfo name={product.name} price={product.price} />
+      <AddToCartButton productId={product.id} />
     </Card>
   );
 }

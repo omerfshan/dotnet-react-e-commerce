@@ -14,16 +14,37 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useCart } from "../../Context/CartContext";
 
 type Props = {
   primary: string;
   softBg: string;
-   favoriteCount: number
+  favoriteCount: number;
 };
 
+export default function MainBar({ primary, softBg, favoriteCount }: Props) {
+  const navigate = useNavigate();
 
-export default function MainBar({ primary, softBg, favoriteCount }: Props)  {
+  const { cart } = useCart();
+
+  // 🔥 quantity toplamı
+  const cartCount =
+    cart?.cartItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+
+  // 🔥 badge style
+  const badgeStyle = {
+    "& .MuiBadge-badge": {
+      backgroundColor: primary,
+      color: "white",
+      fontWeight: 700,
+      minWidth: "20px",
+      height: "20px",
+      borderRadius: "50%",
+      fontSize: "12px",
+    },
+  };
+
   return (
     <Container maxWidth="xl">
       <Toolbar
@@ -37,8 +58,8 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props)  {
       >
         {/* LOGO */}
         <Typography
-        component={NavLink}
-        to={"/"}
+          component={NavLink}
+          to={"/"}
           sx={{
             fontWeight: 900,
             fontSize: { xs: 30, md: 38 },
@@ -47,14 +68,13 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props)  {
             cursor: "pointer",
             flexShrink: 0,
             order: { xs: 1, md: 0 },
-             textDecoration: "none",
-          
+            textDecoration: "none",
           }}
         >
           NOVA
         </Typography>
 
-        {/* MOBİL AKSİYONLAR */}
+        {/* MOBİL */}
         <Box
           sx={{
             display: { xs: "flex", md: "none" },
@@ -64,14 +84,16 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props)  {
           }}
         >
           <IconButton size="small"><PersonOutlineIcon /></IconButton>
+
           <IconButton size="small">
             <Badge badgeContent={favoriteCount} color="error">
               <FavoriteBorderIcon />
             </Badge>
-        </IconButton>
-          <IconButton size="small">
-            <Badge badgeContent={0}>
-              <ShoppingCartOutlinedIcon />
+          </IconButton>
+
+          <IconButton size="small" onClick={() => navigate("/cart")}>
+            <Badge badgeContent={cartCount} sx={badgeStyle}>
+              <ShoppingCartOutlinedIcon sx={{ color: primary }} />
             </Badge>
           </IconButton>
         </Box>
@@ -81,8 +103,6 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props)  {
           sx={{
             flexGrow: { xs: 0, md: 1 },
             flexBasis: { xs: "100%", md: "auto" },
-            width: { xs: "100%", md: "auto" },
-            order: { xs: 3, md: 0 },
             display: "flex",
             alignItems: "center",
             bgcolor: softBg,
@@ -101,24 +121,25 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props)  {
           </IconButton>
         </Box>
 
-        {/* DESKTOP ACTIONS */}
+        {/* DESKTOP */}
         <Stack direction="row" spacing={1} sx={{ display: { xs: "none", md: "flex" } }}>
           <Button startIcon={<PersonOutlineIcon />}>Hesabım</Button>
+
           <Button
-            startIcon=
-            {
+            startIcon={
               <Badge badgeContent={favoriteCount} color="error">
                 <FavoriteBorderIcon />
               </Badge>
             }
->
-  Favoriler
-</Button>
+          >
+            Favoriler
+          </Button>
 
           <Button
+            onClick={() => navigate("/cart")}
             startIcon={
-              <Badge badgeContent={0}>
-                <ShoppingCartOutlinedIcon />
+              <Badge badgeContent={cartCount} sx={badgeStyle}>
+                <ShoppingCartOutlinedIcon sx={{ color: primary }} />
               </Badge>
             }
           >

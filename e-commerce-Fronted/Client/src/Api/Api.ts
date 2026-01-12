@@ -3,7 +3,7 @@ import { router } from "../Router/Routes";
 import { toast } from "react-toastify";
 
 axios.defaults.baseURL = "http://localhost:5232/api/";
-
+axios.defaults.withCredentials=true;
 axios.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
@@ -89,11 +89,18 @@ const Errors = {
   getServerError: () => queries.get("Error/server-error"),
   getValidationError: () => queries.get("Error/validation-error"),
 };
+const Cart={
+ 
+  addItem: (productId: number, quantity: number = 1) =>queries.post(`Cart?productId=${productId}&quantity=${quantity}`, {}),
+   deleteItem: (productId: number, quantity: number = 1) =>queries.delete(`Cart?productId=${productId}&quantity=${quantity}`),
+   getCart:()=> queries.get('Cart'),
+}
 
-// ❗️TEK DÜZELTME BURASI
+
 const requests = {
   Catalog,
   Errors,
+  Cart
 };
 
 export default requests;
