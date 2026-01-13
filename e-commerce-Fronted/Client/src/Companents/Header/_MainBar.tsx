@@ -139,7 +139,7 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
             onClick={() => navigate("/cart")}
             startIcon={
               <Badge badgeContent={cartCount} sx={badgeStyle}>
-                <ShoppingCartOutlinedIcon sx={{ color: primary }} />
+                <ShoppingCartOutlinedIcon />
               </Badge>
             }
           >

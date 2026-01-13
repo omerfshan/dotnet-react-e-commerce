@@ -1,4 +1,5 @@
-import { Button, Box } from "@mui/material";
+import { Box } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import requests from "../../Api/Api";
 import { useState } from "react";
 import { ShoppingCart } from "@mui/icons-material";
@@ -27,19 +28,20 @@ export default function AddToCartButton({ productId }: Props) {
 
   return (
     <Box px={1.5} pb={1.5} pt={0}>
-      <Button
+      <LoadingButton
         startIcon={<ShoppingCart />}
         variant="outlined"
         fullWidth
         size="small"
-        disabled={loading}
+        loading={loading}
+        loadingPosition="start"
         onClick={(e) => {
           e.stopPropagation();
           handleAddItem(productId);
         }}
       >
         Sepete Ekle
-      </Button>
+      </LoadingButton>
     </Box>
   );
 }
