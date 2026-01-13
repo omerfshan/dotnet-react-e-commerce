@@ -1,0 +1,6 @@
+**/ecommerce.db
+**/bin
+**/obj
+**/node_modules
+.git
+.gitignore
