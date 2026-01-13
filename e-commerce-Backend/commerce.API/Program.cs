@@ -15,17 +15,20 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();  
+        policy.WithOrigins(
+                "http://localhost:5173",             // local dev
+                "http://commerce-client.2.59.119.173.sslip.io", // ileride frontend domainin
+                "http://commerce-api.2.59.119.173.sslip.io"     // gerekirse test için
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(CartProfile).Assembly);
-
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -34,19 +37,20 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 var app = builder.Build();
-app.UseMiddleware<ExceptionHandling>();
- app.UseSwagger();
-app.UseSwaggerUI();
-if (app.Environment.IsDevelopment())
-{
-   
-}
 
-app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandling>();
+
+// 🔥 Swagger'ı HER ortamda aç
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Commerce API v1");
+    c.RoutePrefix = "swagger";
+});
+
 
 
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseCors("CorsPolicy");
