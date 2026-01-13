@@ -2,14 +2,16 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Proje dosyasını kopyala
-COPY *.csproj ./
+# Sadece csproj dosyasını kopyala (doğru path ile)
+COPY e-commerce-Backend/commerce.API/*.csproj ./
 
 # NuGet paketlerini indir
 RUN dotnet restore
 
-# Tüm kaynak kodu kopyala ve publish et
-COPY . ./
+# Tüm backend source'u kopyala
+COPY e-commerce-Backend/commerce.API/. ./
+
+# Publish et
 RUN dotnet publish -c Release -o /app/publish
 
 # --- RUNTIME STAGE ---
@@ -24,5 +26,5 @@ ENV ASPNETCORE_URLS=http://+:80
 
 EXPOSE 80
 
-# Buradaki DLL senin proje DLL'in
+# Proje DLL'in doğru: commerce.API.dll
 ENTRYPOINT ["dotnet", "commerce.API.dll"]
