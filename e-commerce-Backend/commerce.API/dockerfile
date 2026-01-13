@@ -1,0 +1,28 @@
+# --- BUILD STAGE ---
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# Proje dosyasını kopyala
+COPY *.csproj ./
+
+# NuGet paketlerini indir
+RUN dotnet restore
+
+# Tüm kaynak kodu kopyala ve publish et
+COPY . ./
+RUN dotnet publish -c Release -o /app/publish
+
+# --- RUNTIME STAGE ---
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+WORKDIR /app
+
+# Yayınlanan dosyaları runtime içine kopyala
+COPY --from=build /app/publish .
+
+# Kestrel'in 80 portundan dinlemesi için
+ENV ASPNETCORE_URLS=http://+:80
+
+EXPOSE 80
+
+# Buradaki DLL senin proje DLL'in
+ENTRYPOINT ["dotnet", "commerce.API.dll"]
