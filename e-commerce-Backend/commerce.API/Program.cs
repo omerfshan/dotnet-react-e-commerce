@@ -16,9 +16,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy", policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173",             // local dev
-                "http://commerce-client.2.59.119.173.sslip.io", // ileride frontend domainin
-                "http://commerce-api.2.59.119.173.sslip.io"     // gerekirse test için
+                "http://localhost:5173",                        // local dev
+                "http://commerce-client.2.59.119.173.sslip.io", // ileride front domain
+                "http://commerce-api.2.59.119.173.sslip.io"     // istersen test için
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
@@ -38,9 +38,15 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 var app = builder.Build();
 
+// 🔥 SUNUCU AÇILIRKEN MIGRATIONS ÇALIŞTIR 🔥
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+    db.Database.Migrate(); // <<<<<< ÖNEMLİ KISIM
+}
+
 app.UseMiddleware<ExceptionHandling>();
 
-// 🔥 Swagger'ı HER ortamda aç
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -48,9 +54,11 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-
+// Şimdilik HTTPS redirect kapalı kalsın, CapRover üstünden hallederiz
+// app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseCors("CorsPolicy");
