@@ -23,53 +23,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     cart?.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) ??
     0;
 
-  const increaseItem = (item: ICartItem) => {
-    requests.Cart.addItem(item.productId, 1);
-    setCart((prev) =>
-      prev
-        ? {
-            ...prev,
-            cartItems: prev.cartItems.map((ci) =>
-              ci.productId === item.productId
-                ? { ...ci, quantity: ci.quantity + 1 }
-                : ci
-            ),
-          }
-        : prev
-    );
-  };
+  const increaseItem = async (item: ICartItem) => {
+  await requests.Cart.addItem(item.productId, 1);
+  refreshCart();
+};
 
-  const decreaseItem = (item: ICartItem) => {
-    if (item.quantity <= 1) return removeItem(item);
+ const decreaseItem = async (item: ICartItem) => {
+  if (item.quantity <= 1) {
+    await requests.Cart.deleteItem(item.productId, item.quantity);
+  } else {
+    await requests.Cart.deleteItem(item.productId, 1);
+  }
+  refreshCart();
+};
 
-    requests.Cart.deleteItem(item.productId, 1);
-    setCart((prev) =>
-      prev
-        ? {
-            ...prev,
-            cartItems: prev.cartItems.map((ci) =>
-              ci.productId === item.productId
-                ? { ...ci, quantity: ci.quantity - 1 }
-                : ci
-            ),
-          }
-        : prev
-    );
-  };
-
-  const removeItem = (item: ICartItem) => {
-    requests.Cart.deleteItem(item.productId, item.quantity);
-    setCart((prev) =>
-      prev
-        ? {
-            ...prev,
-            cartItems: prev.cartItems.filter(
-              (ci) => ci.productId !== item.productId
-            ),
-          }
-        : prev
-    );
-  };
+  const removeItem = async (item: ICartItem) => {
+  await requests.Cart.deleteItem(item.productId, item.quantity);
+  refreshCart();
+};
 const refreshCart = () => {
   return requests.Cart.getCart().then(data => setCart(data));
 };

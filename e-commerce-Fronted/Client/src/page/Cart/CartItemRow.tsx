@@ -1,5 +1,5 @@
 // src/pages/cart/CartItemRow.tsx
-import { Box, Typography, Stack, IconButton, Grid } from "@mui/material";
+import { Box, Typography, Stack, IconButton, Grid, CircularProgress } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -8,6 +8,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import colors from "../../theme/color";
 import type { ICartItem } from "../../Model/ICartItem";
 import { useCart } from "../../Context/CartContext";
+import { useState } from "react";
 
 
 type CartItemRowProps = {
@@ -16,7 +17,24 @@ type CartItemRowProps = {
 
 export default function CartItemRow({ item }: CartItemRowProps) {
   const { increaseItem, decreaseItem, removeItem } = useCart(); // 🔥 CONTEXT FONK.
+ const [loadingType, setLoadingType] = useState<"inc" | "dec" | "del" | null>(null);
+  const handleIncrease = async () => {
+  setLoadingType("inc");
+  await increaseItem(item);
+  setLoadingType(null);
+};
 
+const handleDecrease = async () => {
+  setLoadingType("dec");
+  await decreaseItem(item);
+  setLoadingType(null);
+};
+
+const handleRemove = async () => {
+  setLoadingType("del");
+  await removeItem(item);
+  setLoadingType(null);
+};
   return (
     <Box
       sx={{
@@ -79,17 +97,25 @@ export default function CartItemRow({ item }: CartItemRowProps) {
                 gap: 0.5,
               }}
             >
-              <IconButton size="small" onClick={() => decreaseItem(item)}>
+             <IconButton size="small" onClick={handleDecrease} disabled={loadingType !== null}>
+              {loadingType === "dec" ? (
+                <CircularProgress size={16} />
+              ) : (
                 <RemoveIcon fontSize="small" />
-              </IconButton>
+              )}
+            </IconButton>
 
               <Typography width={20} textAlign="center">
                 {item.quantity}
               </Typography>
 
-              <IconButton size="small" onClick={() => increaseItem(item)}>
-                <AddIcon fontSize="small" />
-              </IconButton>
+          <IconButton size="small" onClick={handleIncrease} disabled={loadingType !== null}>
+          {loadingType === "inc" ? (
+            <CircularProgress size={16} />
+          ) : (
+            <AddIcon fontSize="small" />
+          )}
+        </IconButton>
             </Box>
           </Stack>
         </Grid>
@@ -100,9 +126,14 @@ export default function CartItemRow({ item }: CartItemRowProps) {
             <Typography fontWeight={700} fontSize={18} sx={{ color: "#000", whiteSpace: "nowrap" }}>
               {(item.price * item.quantity).toLocaleString("tr-TR")} TL
             </Typography>
-            <IconButton color="error" size="small" onClick={() => removeItem(item)}>
-              <DeleteOutlineIcon fontSize="small" />
-            </IconButton>
+            
+          <IconButton color="error" size="small" onClick={handleRemove} disabled={loadingType !== null}>
+          {loadingType === "del" ? (
+            <CircularProgress size={16} color="error" />
+          ) : (
+            <DeleteOutlineIcon fontSize="small" />
+          )}
+        </IconButton>
           </Stack>
         </Grid>
       </Grid>
