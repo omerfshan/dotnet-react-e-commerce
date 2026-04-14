@@ -6,10 +6,12 @@ import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import colors from "../theme/color";
 
+
 export default function AboutPage() {
   return (
     <Box>
       {/* HERO SECTION */}
+
       <Box
         sx={{
           bgcolor: colors.softBg,

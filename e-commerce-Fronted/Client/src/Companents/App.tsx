@@ -1,25 +1,27 @@
 import { useEffect } from "react";
-
 import { Container, CssBaseline } from "@mui/material";
 import Header from "./Header/Header";
 import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useCart } from "../Context/CartContext";
+
+import { fetchCart } from "../store/Cart/cartSlice"; 
+import { useAppDispatch } from "../store/ hooks";
+
 
 export default function App() {
-  const { refreshCart } = useCart();
+  const dispatch = useAppDispatch(); 
 
   useEffect(() => {
-    refreshCart();   // 🔥 uygulama açılır açılmaz sepeti yükle
+    dispatch(fetchCart()); 
   }, []);
 
   return (
     <>
-      <ToastContainer position="bottom-right" hideProgressBar theme="colored"/>
+      <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
       <CssBaseline />
       <Header favoriteCount={0} />
-      <Container sx={{ minHeight: '80vh', pb: 5 }}>
+      <Container sx={{ minHeight: "80vh", pb: 5 }}>
         <Outlet />
       </Container>
       <Footer />

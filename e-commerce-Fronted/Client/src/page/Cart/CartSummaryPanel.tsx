@@ -1,11 +1,14 @@
-// src/pages/cart/CartSummaryPanel.tsx
 import { Box, Paper, Typography, Button } from "@mui/material";
 import colors from "../../theme/color";
-import { useCart } from "../../Context/CartContext";
+import { useAppSelector } from "../../store/ hooks";
 
 
 export default function CartSummaryPanel() {
-  const { totalPrice, cart } = useCart(); // 🔥 props yok
+  const cart = useAppSelector((state) => state.cart.cart); // ✅ değişti
+
+  const totalPrice = cart?.cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity, 0
+  ) ?? 0;
 
   return (
     <Box>
@@ -16,11 +19,9 @@ export default function CartSummaryPanel() {
         >
           SEÇİLEN ÜRÜNLER ({cart?.cartItems.length})
         </Typography>
-
         <Typography fontWeight={900} fontSize={26}>
           {totalPrice.toLocaleString("tr-TR")} TL
         </Typography>
-
         <Button
           variant="contained"
           fullWidth

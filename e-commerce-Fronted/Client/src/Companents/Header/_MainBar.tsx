@@ -9,13 +9,13 @@ import {
   Badge,
   Stack,
 } from "@mui/material";
-
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useCart } from "../../Context/CartContext";
+import { useAppSelector } from "../../store/ hooks";
+
 
 type Props = {
   primary: string;
@@ -25,14 +25,10 @@ type Props = {
 
 export default function MainBar({ primary, softBg, favoriteCount }: Props) {
   const navigate = useNavigate();
+  const cart = useAppSelector((state) => state.cart.cart); // ✅ değişti
 
-  const { cart } = useCart();
+  const cartCount = cart?.cartItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
 
-  // 🔥 quantity toplamı
-  const cartCount =
-    cart?.cartItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
-
-  // 🔥 badge style
   const badgeStyle = {
     "& .MuiBadge-badge": {
       backgroundColor: primary,
@@ -56,7 +52,6 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           flexWrap: { xs: "wrap", md: "nowrap" },
         }}
       >
-        {/* LOGO */}
         <Typography
           component={NavLink}
           to={"/"}
@@ -74,7 +69,6 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           NOVA
         </Typography>
 
-        {/* MOBİL */}
         <Box
           sx={{
             display: { xs: "flex", md: "none" },
@@ -84,13 +78,11 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           }}
         >
           <IconButton size="small"><PersonOutlineIcon /></IconButton>
-
           <IconButton size="small">
             <Badge badgeContent={favoriteCount} color="error">
               <FavoriteBorderIcon />
             </Badge>
           </IconButton>
-
           <IconButton size="small" onClick={() => navigate("/cart")}>
             <Badge badgeContent={cartCount} sx={badgeStyle}>
               <ShoppingCartOutlinedIcon sx={{ color: primary }} />
@@ -98,7 +90,6 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           </IconButton>
         </Box>
 
-        {/* SEARCH */}
         <Box
           sx={{
             flexGrow: { xs: 0, md: 1 },
@@ -121,10 +112,8 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           </IconButton>
         </Box>
 
-        {/* DESKTOP */}
         <Stack direction="row" spacing={1} sx={{ display: { xs: "none", md: "flex" } }}>
           <Button startIcon={<PersonOutlineIcon />}>Hesabım</Button>
-
           <Button
             startIcon={
               <Badge badgeContent={favoriteCount} color="error">
@@ -134,7 +123,6 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           >
             Favoriler
           </Button>
-
           <Button
             onClick={() => navigate("/cart")}
             startIcon={

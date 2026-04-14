@@ -1,30 +1,17 @@
 import { Box } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import requests from "../../Api/Api";
-import { useState } from "react";
 import { ShoppingCart } from "@mui/icons-material";
-import { useCart } from "../../Context/CartContext";
-
+import { useAppDispatch, useAppSelector } from "../../store/ hooks";
+import { addToCart } from "../../store/Cart/cartSlice";
+           // ✅
 
 type Props = {
   productId: number;
 };
 
 export default function AddToCartButton({ productId }: Props) {
-  const [loading, setLoading] = useState(false);
-  const { refreshCart } = useCart();   // 🔥 BURADA ALIYORUZ
-
-  function handleAddItem(productId: number) {
-    setLoading(true);
-
-    requests.Cart.addItem(productId)
-      .then(() => {
-        console.log("Sepete eklendi");
-        refreshCart();  // 🔥🔥 ASIL KRİTİK ÇAĞRI BU
-      })
-      .catch(err => console.log("Hata:", err))
-      .finally(() => setLoading(false));
-  }
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector((state) => state.cart.loading);
 
   return (
     <Box px={1.5} pb={1.5} pt={0}>
@@ -37,7 +24,7 @@ export default function AddToCartButton({ productId }: Props) {
         loadingPosition="start"
         onClick={(e) => {
           e.stopPropagation();
-          handleAddItem(productId);
+          dispatch(addToCart(productId));
         }}
       >
         Sepete Ekle

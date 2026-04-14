@@ -10,7 +10,7 @@ import Unauthorized from "../page/ErrorPages/Unauthorized";
 import ValidationError from "../page/ErrorPages/ValidationError";
 import ServerError from "../page/ErrorPages/ServerError"
 import HomePage from "../page/HomePage";
-import Example from "../example";
+import Example from "../Example/example";
 
 import CartPage from "../page/Cart/CartPage";
 
