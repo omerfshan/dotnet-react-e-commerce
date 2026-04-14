@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Box, CircularProgress } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../store/ hooks";
+import { fetchProducts, fetchProductsByCategory } from "../store/Products/productsSlice";
 import ProductList from "../Companents/ProductList";
-import type { IProduct } from "../Model/IProduct";
-
-import requests from "../Api/Api";
 
 export default function CatalogPage() {
-  const { id } = useParams(); // /category/:id
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
+  const { products, status } = useAppSelector((state) => state.products);
 
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchProductsByCategory(Number(id)));
+    } else {
+      dispatch(fetchProducts());
+    }
+  }, [id, dispatch]);
 
- useEffect(() => {
-  const req = id
-    ? requests.Catalog.Category_details(Number(id))
-    : requests.Catalog.list();
+  if (status === "loading") {
+    return (
+      <Box sx={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-  req
-    .then((data) => setProducts(data))
-    .catch((err) => console.log("FETCH ERROR:", err));
-}, [id]);
-
-
-  return (
-    <ProductList
-      products={products}
-    
-    />
-  );
+  return <ProductList products={products} />;
 }

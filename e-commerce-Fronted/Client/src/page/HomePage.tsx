@@ -1,22 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Box, CircularProgress } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../store/ hooks";
+import { fetchProducts } from "../store/Products/productsSlice";
 import ProductList from "../Companents/ProductList";
-import type { IProduct } from "../Model/IProduct";
-import requests from "../Api/Api";
 
 export default function HomePage() {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  
+  const dispatch = useAppDispatch();
+  const { products, status } = useAppSelector((state) => state.products);
 
   useEffect(() => {
-    requests.Catalog.list()
-      .then(data => setProducts(data))
-      .catch(err => console.log(err));
-  }, []);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-  return (
-    <ProductList
-      products={products}
-     
-    />
-  );
+  if (status === "loading") {
+    return (
+      <Box sx={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return <ProductList products={products} />;
 }

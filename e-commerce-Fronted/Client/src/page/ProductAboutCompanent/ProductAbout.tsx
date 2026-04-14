@@ -10,12 +10,13 @@ import ProductGalleryPanel from "./Companents/ProductGalleryPanel";
 import ProductBuyPanel from "./Companents/ProductBuyPanel";
 import ProductDescriptionPanel from "./Companents/ProductDescriptionPanel";
 import requests from "../../Api/Api";
+import { imageUrl } from "../../Api/config";
 
 
 
 
 // 🔧 backend static images base (senin backend: http://localhost:5232/images/1.jpg gibi)
-const IMAGE_BASE = "http://localhost:5232/images/";
+
 
 export default function ProductAboutPage() {
   const { id } = useParams();
@@ -40,10 +41,8 @@ export default function ProductAboutPage() {
   }, [id]);
 
   const images = useMemo(() => {
-    if (!product?.imageUrl) return ["/images/1.jpg"]; // fallback (istersen placeholder koyarız)
-    // imageUrl "1.jpg" gibi geliyorsa:
-    return [`${IMAGE_BASE}${product.imageUrl}`];
-  }, [product?.imageUrl]);
+  return [imageUrl(product?.imageUrl)];
+}, [product?.imageUrl]);
 
   // demo’daki highlights yerine: description’dan 2-3 madde çıkaralım (layout aynı kalsın)
   const highlights = useMemo(() => {

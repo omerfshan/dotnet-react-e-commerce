@@ -9,6 +9,7 @@ import type { ICartItem } from "../../Model/ICartItem";
 import { increaseCartItem, decreaseCartItem, removeCartItem } from "../../store/Cart/cartSlice"; // ✅ değişti
 import { useState } from "react";
 import { useAppDispatch } from "../../store/ hooks";
+import { imageUrl } from "../../Api/config";
 
 type CartItemRowProps = {
   item: ICartItem;
@@ -42,7 +43,7 @@ export default function CartItemRow({ item }: CartItemRowProps) {
         <Grid size={{ xs: 3, sm: 2 }}>
           <Box
             component="img"
-            src={`http://localhost:5232/images/${item.imageUrl}`}
+            src={imageUrl(item.imageUrl)}
             sx={{
               width: "100%",
               aspectRatio: "1/1",

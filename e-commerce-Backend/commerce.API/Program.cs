@@ -57,14 +57,10 @@ app.UseSwaggerUI(c =>
 // Şimdilik HTTPS redirect kapalı kalsın, CapRover üstünden hallederiz
 // app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-
 app.UseRouting();
-
-app.UseCors("CorsPolicy");
-
+app.UseCors("CorsPolicy");            
+app.UseMiddleware<ExceptionHandling>(); 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

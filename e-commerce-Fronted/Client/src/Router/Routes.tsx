@@ -11,8 +11,10 @@ import ValidationError from "../page/ErrorPages/ValidationError";
 import ServerError from "../page/ErrorPages/ServerError"
 import HomePage from "../page/HomePage";
 import Example from "../Example/example";
+import CartPage from "../page/CartBasket/CartPage";
 
-import CartPage from "../page/Cart/CartPage";
+
+
 
 
 // ✅ Error Pages (oluşturduğun dosya path'lerine göre importları düzelt)

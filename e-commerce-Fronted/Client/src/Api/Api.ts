@@ -1,8 +1,9 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { router } from "../Router/Routes";
 import { toast } from "react-toastify";
+import { BASE_URL } from "./config";
 
-axios.defaults.baseURL = "http://localhost:5232/api/";
+axios.defaults.baseURL = `${BASE_URL}/api/`;
 axios.defaults.withCredentials=true;
 axios.interceptors.response.use(
   (response) => response,

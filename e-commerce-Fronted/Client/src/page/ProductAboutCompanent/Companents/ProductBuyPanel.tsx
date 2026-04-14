@@ -23,6 +23,7 @@ import colors from "../../../theme/color";
 import type { IProduct } from "../../../Model/IProduct";
 import AddToCartModal from "./AddToCartModal";
 import { useAppDispatch } from "../../../store/ hooks";
+import { imageUrl } from "../../../Api/config";
 
 function formatMoneyTRY(value: number) {
   return `₺${Number(value).toLocaleString("tr-TR", {
@@ -257,9 +258,8 @@ export default function ProductBuyPanel({
         onClose={() => setOpen(false)}
         product={{
           name: product.name,
-          imageUrl: product.imageUrl
-            ? `http://localhost:5232/images/${product.imageUrl}`
-            : "/images/1.jpg",
+          imageUrl:imageUrl(product.imageUrl),
+            
         }}
       />
     </Box>

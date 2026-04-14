@@ -1,9 +1,8 @@
-import { Box } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import { Box, Button } from "@mui/material";
 import { ShoppingCart } from "@mui/icons-material";
-import { useAppDispatch, useAppSelector } from "../../store/ hooks";
+import { useState } from "react";
+import { useAppDispatch } from "../../store/ hooks";
 import { addToCart } from "../../store/Cart/cartSlice";
-           // ✅
 
 type Props = {
   productId: number;
@@ -11,24 +10,27 @@ type Props = {
 
 export default function AddToCartButton({ productId }: Props) {
   const dispatch = useAppDispatch();
-  const loading = useAppSelector((state) => state.cart.loading);
+  const [loading, setLoading] = useState(false); // local state
+
+  const handleClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLoading(true);
+    await dispatch(addToCart(productId));
+    setLoading(false);
+  };
 
   return (
     <Box px={1.5} pb={1.5} pt={0}>
-      <LoadingButton
+      <Button
         startIcon={<ShoppingCart />}
         variant="outlined"
         fullWidth
         size="small"
-        loading={loading}
-        loadingPosition="start"
-        onClick={(e) => {
-          e.stopPropagation();
-          dispatch(addToCart(productId));
-        }}
+        disabled={loading}
+        onClick={handleClick}
       >
-        Sepete Ekle
-      </LoadingButton>
+        {loading ? "Ekleniyor..." : "Sepete Ekle"}
+      </Button>
     </Box>
   );
 }

@@ -1,5 +1,6 @@
 import { Box, CardMedia } from "@mui/material";
 import colors from "../../theme/color";
+import { imageUrl as getImageUrl } from "../../Api/config"; // EKLE
 
 
 type Props = {
@@ -13,7 +14,7 @@ export default function ProductImage({ imageUrl, name }: Props) {
       <CardMedia
         component="img"
         height="200"
-        image={`http://localhost:5232/images/${imageUrl}`}
+        image={getImageUrl(imageUrl)} // DEĞİŞTİR
         alt={name}
         sx={{ objectFit: "contain", p: 2 }}
       />

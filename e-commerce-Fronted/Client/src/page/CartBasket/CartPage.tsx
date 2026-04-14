@@ -5,12 +5,11 @@ import CartSummaryPanel from "./CartSummaryPanel";
 import CartItemRow from "./CartItemRow";
 import { useAppSelector } from "../../store/ hooks";
 
-
 export default function CartPage() {
-  const cart = useAppSelector((state) => state.cart.cart);       // ✅ değişti
-  const loading = useAppSelector((state) => state.cart.loading); // ✅ değişti
+  const cart = useAppSelector((state) => state.cart.cart);
+  const status = useAppSelector((state) => state.cart.status);
 
-  if (loading) {
+  if (status === "loading" && !cart) {
     return (
       <Box sx={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <CircularProgress />
@@ -53,13 +52,11 @@ export default function CartPage() {
                 </Typography>
                 <Typography sx={{ color: colors.newBadge, fontWeight: 700 }}>Kargo bedava</Typography>
               </Box>
-
               {cart.cartItems.map((item) => (
                 <CartItemRow key={item.productId} item={item} />
               ))}
             </Box>
           </Box>
-
           <CartSummaryPanel />
         </Box>
       </Box>

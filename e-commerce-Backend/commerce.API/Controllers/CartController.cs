@@ -54,19 +54,18 @@ public class CartController : ControllerBase
         return BadRequest(new ProblemDetails { Title = "The product can not be added to cart" });
     }
 
-    // DELETE: api/cart?productId=1&quantity=1
+    // CartController.cs — DELETE
     [HttpDelete]
-    public async Task<IActionResult> DeleteFromCart(int productId, int quantity)
+    public async Task<ActionResult<CartDto>> DeleteFromCart(int productId, int quantity)
     {
         var cart = await GetOrCreate();
-
         cart.RemoveItem(productId, quantity);
-
         var result = await _context.SaveChangesAsync() > 0;
-
         if (result)
-            return Ok();
-
+        {
+            var cartDto = _mapper.Map<CartDto>(cart);
+            return Ok(cartDto); // ← sadece bunu değiştir
+        }
         return BadRequest(new ProblemDetails { Title = "problem removing item" });
     }
 
