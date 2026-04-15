@@ -1,0 +1,16 @@
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/bin/Debug/net9.0/Commerce.Entity.deps.json
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/bin/Debug/net9.0/Commerce.Entity.dll
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/bin/Debug/net9.0/Commerce.Entity.pdb
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/bin/Debug/net9.0/Commerce.Core.dll
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/bin/Debug/net9.0/Commerce.Core.pdb
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.Entity.csproj.AssemblyReference.cache
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.Entity.GeneratedMSBuildEditorConfig.editorconfig
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.Entity.AssemblyInfoInputs.cache
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.Entity.AssemblyInfo.cs
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.Entity.csproj.CoreCompileInputs.cache
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.Entity.sourcelink.json
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.B0A81333.Up2Date
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.Entity.dll
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/refint/Commerce.Entity.dll
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/Commerce.Entity.pdb
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/Debug/net9.0/ref/Commerce.Entity.dll

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-namespace API.Controllers;
+namespace Commerce.API.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]

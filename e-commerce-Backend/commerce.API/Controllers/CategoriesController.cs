@@ -1,53 +1,32 @@
-using API.Data;
-using API.Dto;
+using Commerce.Business.DTO;
+using Commerce.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace API.Controllers
+namespace Commerce.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class CategoriesController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(DataContext context)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
-        // GET: api/categories
         [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = await _context.Categories
-                .AsNoTracking()
-                .OrderBy(c => c.Name)
-                .ToListAsync();
-
+            var categories = await _categoryService.GetCategoriesAsync();
             return Ok(categories);
         }
+
         [HttpGet("{categoryId:int}")]
         public async Task<ActionResult<List<ProductListDto>>> GetProductsByCategory(int categoryId)
         {
-            var products = await _context.Products
-                .AsNoTracking()
-                .Where(p => p.ProductCategories.Any(pc => pc.CategoryId == categoryId))
-                .Select(p => new ProductListDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    IsActive = p.IsActive,
-                    ImageUrl = p.ImageUrl,
-                    Stock = p.Stock
-                })
-                .ToListAsync();
-
+            var products = await _categoryService.GetProductsByCategoryAsync(categoryId);
             return Ok(products);
         }
-
     }
-
 }

@@ -1,0 +1,95 @@
+{
+  "version": 3,
+  "targets": {
+    "net9.0": {
+      "Commerce.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Commerce.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Commerce.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Commerce.Core/1.0.0": {
+      "type": "project",
+      "path": "../Commerce.Core/Commerce.Core.csproj",
+      "msbuildProject": "../Commerce.Core/Commerce.Core.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "Commerce.Core >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/Users/omerfaruksahan/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/Commerce.Entity.csproj",
+      "projectName": "Commerce.Entity",
+      "projectPath": "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/Commerce.Entity.csproj",
+      "packagesPath": "/Users/omerfaruksahan/.nuget/packages/",
+      "outputPath": "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Entity/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/Users/omerfaruksahan/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {
+            "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/Commerce.Core.csproj": {
+              "projectPath": "/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/Commerce.Core.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.306/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/bin/Debug/net9.0/Commerce.Core.deps.json
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/bin/Debug/net9.0/Commerce.Core.dll
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/bin/Debug/net9.0/Commerce.Core.pdb
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/Commerce.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/Commerce.Core.AssemblyInfoInputs.cache
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/Commerce.Core.AssemblyInfo.cs
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/Commerce.Core.csproj.CoreCompileInputs.cache
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/Commerce.Core.sourcelink.json
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/Commerce.Core.dll
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/refint/Commerce.Core.dll
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/Commerce.Core.pdb
+/Users/omerfaruksahan/projects/dotnet-react-e-commerce/e-commerce-Backend/Commerce.Core/obj/Debug/net9.0/ref/Commerce.Core.dll

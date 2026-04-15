@@ -1,5 +1,6 @@
-using API.Data;
-using API.Profiles;
+using Commerce.DataAccess;
+using Commerce.Business.Profiles;
+using Commerce.Business.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,10 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(CartProfile).Assembly);
+
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
