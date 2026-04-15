@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import { fetchCart } from "../store/Cart/cartSlice"; 
+import { fetchCart } from "../Features/CartBasket/cartSlice"; 
 import { useAppDispatch } from "../store/ hooks";
 
 

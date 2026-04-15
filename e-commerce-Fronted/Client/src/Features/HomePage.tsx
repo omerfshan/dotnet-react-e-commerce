@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/ hooks";
-import { fetchProducts } from "../store/Products/productsSlice";
-import ProductList from "../Companents/ProductList";
+import { fetchProducts } from "./ProductCard/productsSlice";
+import ProductList from "../Layout/ProductList";
 
 export default function HomePage() {
   const dispatch = useAppDispatch();

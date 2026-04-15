@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/ hooks";
-import { fetchProducts, fetchProductsByCategory } from "../store/Products/productsSlice";
-import ProductList from "../Companents/ProductList";
+import { fetchProducts, fetchProductsByCategory } from "./ProductCard/productsSlice";
+import ProductList from "../Layout/ProductList";
 
 export default function CatalogPage() {
   const { id } = useParams();

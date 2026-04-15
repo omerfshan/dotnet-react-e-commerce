@@ -1,17 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "../Companents/App";
-import AboutPage from "../page/AboutPage";
-import ContactPage from "../page/ContactPage";
-import CatalogPage from "../page/CatalogPage";
-import ProductAbout from "../page/ProductAboutCompanent/ProductAbout";
-import NotFound from "../page/ErrorPages/NotFound";
-import BadRequest from "../page/ErrorPages/BadRequest";
-import Unauthorized from "../page/ErrorPages/Unauthorized";
-import ValidationError from "../page/ErrorPages/ValidationError";
-import ServerError from "../page/ErrorPages/ServerError"
-import HomePage from "../page/HomePage";
+import App from "../Layout/App";
+import AboutPage from "../Features/AboutPage";
+import ContactPage from "../Features/ContactPage";
+import CatalogPage from "../Features/CatalogPage";
+import ProductAbout from "../Features/ProductAboutCompanent/ProductAbout";
+import NotFound from "../Features/ErrorPages/NotFound";
+import BadRequest from "../Features/ErrorPages/BadRequest";
+import Unauthorized from "../Features/ErrorPages/Unauthorized";
+import ValidationError from "../Features/ErrorPages/ValidationError";
+import ServerError from "../Features/ErrorPages/ServerError"
+import HomePage from "../Features/HomePage";
 import Example from "../Example/example";
-import CartPage from "../page/CartBasket/CartPage";
+import CartPage from "../Features/CartBasket/CartPage";
 
 
 
