@@ -4,7 +4,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import colors from "../theme/color";
+import colors from "../../theme/color";
+
 
 export default function ContactPage() {
   return (

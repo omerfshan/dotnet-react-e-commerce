@@ -1,50 +1,58 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Grid } from "@mui/material";
-
 import colors from "../../theme/color";
 import type { IProduct } from "../../Model/IProduct";
 import ProductLoading from "./Companents/ProductLoading";
-
 import ProductGalleryPanel from "./Companents/ProductGalleryPanel";
 import ProductBuyPanel from "./Companents/ProductBuyPanel";
 import ProductDescriptionPanel from "./Companents/ProductDescriptionPanel";
 import requests from "../../Api/Api";
 import { imageUrl } from "../../Api/config";
 
-
-
-
-// 🔧 backend static images base (senin backend: http://localhost:5232/images/1.jpg gibi)
-
+// ✅ Ekle
+import { selectProductById } from "../../store/Slices/productsSlice";
+import { useAppSelector } from "../../store/ hooks";
 
 export default function ProductAboutPage() {
   const { id } = useParams();
 
-  const [product, setProduct] = useState<IProduct | null>(null);
-  const [loading, setLoading] = useState(true);
+  // ✅ Önce cache'e bak
+  const cachedProduct = useAppSelector((state) =>
+    selectProductById(state, Number(id))
+  );
+
+  // ✅ Cache'de varsa direkt kullan, loading'i false başlat
+  const [product, setProduct] = useState<IProduct | null>(cachedProduct ?? null);
+  const [loading, setLoading] = useState(!cachedProduct);
 
   const [activeIndex, setActiveIndex] = useState(0);
-
-  // senin sayfada options var ama modelinde yok; layout bozulmasın diye boş bırakıyoruz
   const [optionValues, setOptionValues] = useState<Record<string, string>>({});
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
     if (!id) return;
 
-    setLoading(true);
+    // ✅ Cache'de varsa API'ye gitme
+    if (cachedProduct) {
+      setProduct(cachedProduct);
+      setLoading(false); // ✅ burda kapat
+      return;
+    }
 
+    // Cache'de yoksa API'den çek
+    setLoading(true);
     requests.Catalog.product_Details(Number(id))
       .then((data: IProduct) => setProduct(data))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, cachedProduct]);
 
+
+  // ⬇️ Buradan itibaren hiçbir şey değişmiyor
   const images = useMemo(() => {
-  return [imageUrl(product?.imageUrl)];
-}, [product?.imageUrl]);
+    return [imageUrl(product?.imageUrl)];
+  }, [product?.imageUrl]);
 
-  // demo’daki highlights yerine: description’dan 2-3 madde çıkaralım (layout aynı kalsın)
   const highlights = useMemo(() => {
     const desc = (product?.description || "").trim();
     if (!desc) {
@@ -54,14 +62,11 @@ export default function ProductAboutPage() {
         "Stok durumuna göre hızlı teslimat",
       ];
     }
-
-    // çok minimal: cümleleri bölüp ilk 3’ünü madde yap
     const parts = desc
       .split(/[\.\n]/g)
       .map((s) => s.trim())
       .filter(Boolean)
       .slice(0, 3);
-
     return parts.length
       ? parts
       : [
@@ -71,7 +76,6 @@ export default function ProductAboutPage() {
         ];
   }, [product?.description]);
 
-  // seller kısmı modelinde yok; tasarım bozulmasın diye placeholder bıraktım
   const seller = useMemo(
     () => ({
       name: "Commerce Seller",
@@ -81,10 +85,7 @@ export default function ProductAboutPage() {
     []
   );
 
-  const discountText = useMemo(() => {
-    // senin modelde listPrice yok; layout kalsın diye null
-    return null;
-  }, []);
+  const discountText = useMemo(() => null, []);
 
   if (loading) return <ProductLoading />;
   if (!product) return null;
@@ -93,7 +94,6 @@ export default function ProductAboutPage() {
     <Box sx={{ bgcolor: colors.softBg, minHeight: "100vh", py: { xs: 2, md: 3 } }}>
       <Box sx={{ maxWidth: 1200, mx: "auto", px: { xs: 2, md: 3 } }}>
         <Grid container spacing={2.5} alignItems="flex-start">
-          {/* LEFT: Gallery */}
           <Grid size={{ xs: 12, md: 7 }}>
             <ProductGalleryPanel
               images={images}
@@ -102,8 +102,6 @@ export default function ProductAboutPage() {
               stock={product.stock}
             />
           </Grid>
-
-          {/* RIGHT: Details + Sticky Buy Box */}
           <Grid size={{ xs: 12, md: 5 }}>
             <ProductBuyPanel
               product={product}
@@ -117,8 +115,6 @@ export default function ProductAboutPage() {
             />
           </Grid>
         </Grid>
-
-        {/* BOTTOM: Long description */}
         <ProductDescriptionPanel description={product.description} />
       </Box>
     </Box>

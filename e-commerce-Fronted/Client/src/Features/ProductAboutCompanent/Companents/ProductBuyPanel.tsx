@@ -18,7 +18,7 @@ import { useState } from "react";
 import { CircularProgress } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-import { increaseCartItem } from "../../CartBasket/cartSlice"; // ✅ değişti
+import { increaseCartItem } from "../../../store/Slices/cartSlice"; // ✅ değişti
 import colors from "../../../theme/color";
 import type { IProduct } from "../../../Model/IProduct";
 import AddToCartModal from "./AddToCartModal";

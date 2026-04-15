@@ -6,7 +6,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import colors from "../../theme/color";
 import type { ICartItem } from "../../Model/ICartItem";
 
-import { increaseCartItem, decreaseCartItem, removeCartItem } from "./cartSlice"; // ✅ değişti
+import { increaseCartItem, decreaseCartItem, removeCartItem } from "../../store/Slices/cartSlice"; // ✅ değişti
 import { useState } from "react";
 import { useAppDispatch } from "../../store/ hooks";
 import { imageUrl } from "../../Api/config";

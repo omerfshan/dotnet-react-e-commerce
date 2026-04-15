@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import { ShoppingCart } from "@mui/icons-material";
 import { useState } from "react";
 import { useAppDispatch } from "../../store/ hooks";
-import { addToCart } from "../CartBasket/cartSlice";
+import { addToCart } from "../../store/Slices/cartSlice";
 
 type Props = {
   productId: number;
