@@ -1,9 +1,12 @@
 using Commerce.Entity;
+using Commerce.Entity.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Commerce.DataAccess
 {
-    public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
+    public class DataContext(DbContextOptions<DataContext> options) 
+        : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
     {
         public DbSet<Product> Products => Set<Product>();
         public DbSet<Category> Categories => Set<Category>();
@@ -12,9 +15,8 @@ namespace Commerce.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); // Identity tablolarını oluşturur
 
-           
             modelBuilder.Entity<ProductCategory>()
                 .HasKey(pc => new { pc.ProductId, pc.CategoryId });
 
@@ -36,7 +38,6 @@ namespace Commerce.DataAccess
                 new Category { Id = 5, Name = "Akıllı Saat & Giyilebilir" },
                 new Category { Id = 6, Name = "Ev Teknolojileri" }
             );
-
         }
     }
 }

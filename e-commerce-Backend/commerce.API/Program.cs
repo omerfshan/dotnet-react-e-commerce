@@ -1,7 +1,12 @@
 using Commerce.DataAccess;
 using Commerce.Business.Profiles;
 using Commerce.Business.Services;
+using Commerce.Entity.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,13 +22,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy", policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173",                        // local dev
-                "http://commerce-client.2.59.119.173.sslip.io", // ileride front domain
-                "http://commerce-api.2.59.119.173.sslip.io"     // istersen test için
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            "http://localhost:5173",
+            "http://commerce-client.2.59.119.173.sslip.io",
+            "http://commerce-api.2.59.119.173.sslip.io"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
@@ -41,13 +46,46 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlite(connectionString);
 });
 
+// Identity
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+})
+.AddEntityFrameworkStores<DataContext>()
+.AddDefaultTokenProviders();
+
+// JWT
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secret = jwtSettings["Secret"]!;
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+    };
+});
+
 var app = builder.Build();
 
-// 🔥 SUNUCU AÇILIRKEN MIGRATIONS ÇALIŞTIR 🔥
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-    db.Database.Migrate(); // <<<<<< ÖNEMLİ KISIM
+    db.Database.Migrate();
 }
 
 app.UseMiddleware<ExceptionHandling>();
@@ -59,13 +97,11 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-// Şimdilik HTTPS redirect kapalı kalsın, CapRover üstünden hallederiz
-// app.UseHttpsRedirection();
-
 app.UseRouting();
-app.UseCors("CorsPolicy");            
-app.UseMiddleware<ExceptionHandling>(); 
-app.UseAuthorization();
-app.MapControllers();
+app.UseCors("CorsPolicy");
 
-app.Run();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+app.Run(); 
