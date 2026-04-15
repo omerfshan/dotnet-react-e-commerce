@@ -1,17 +1,19 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../Layout/App";
-import AboutPage from "../Features/AboutPage";
-import ContactPage from "../Features/ContactPage";
-import CatalogPage from "../Features/CatalogPage";
+
 import ProductAbout from "../Features/ProductAboutCompanent/ProductAbout";
 import NotFound from "../Features/ErrorPages/NotFound";
 import BadRequest from "../Features/ErrorPages/BadRequest";
 import Unauthorized from "../Features/ErrorPages/Unauthorized";
 import ValidationError from "../Features/ErrorPages/ValidationError";
 import ServerError from "../Features/ErrorPages/ServerError"
-import HomePage from "../Features/HomePage";
+
 import Example from "../Example/example";
 import CartPage from "../Features/CartBasket/CartPage";
+import HomePage from "../Features/Page/HomePage";
+import AboutPage from "../Features/Page/AboutPage";
+import ContactPage from "../Features/Page/ContactPage";
+import CatalogPage from "../Features/Page/CatalogPage";
 
 
 
@@ -33,8 +35,8 @@ export const router = createBrowserRouter([
       { path: "contact", element: <ContactPage /> },
 
       // catalog
-      { path: "catalog", element: <CatalogPage /> },      // tüm ürünler
-      { path: "category/:id", element: <CatalogPage /> }, // kategoriye göre
+      { path: "catalog", element: <CatalogPage /> },      
+      { path: "category/:id", element: <CatalogPage /> },
 
       // product detail
       { path: "catalog/:id", element: <ProductAbout /> },
