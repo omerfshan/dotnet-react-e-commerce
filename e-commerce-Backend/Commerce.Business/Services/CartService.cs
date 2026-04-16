@@ -1,4 +1,5 @@
 using AutoMapper;
+using Commerce.Core.Interfaces;
 using Commerce.Core.DTO;
 using Commerce.DataAccess;
 using Commerce.Core.Exceptions;

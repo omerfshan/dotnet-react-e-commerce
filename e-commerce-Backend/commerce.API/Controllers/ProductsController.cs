@@ -1,4 +1,5 @@
 using Commerce.Core.DTO;
+using Commerce.Core.Interfaces;
 using Commerce.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,8 +33,8 @@ namespace Commerce.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductCreateUpdateDto dto)
         {
-            var product = await _productService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = product.Id }, new { product.Id });
+            var productId = await _productService.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = productId }, new { id = productId });
         }
 
         [HttpPut("{id:int}")]

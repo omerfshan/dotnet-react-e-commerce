@@ -1,4 +1,5 @@
 using Commerce.DataAccess;
+using Commerce.Core.Interfaces;
 using Commerce.Business.Profiles;
 using Commerce.Business.Services;
 using Commerce.Entity.Identity;
@@ -39,7 +40,7 @@ builder.Services.AddAutoMapper(typeof(CartProfile).Assembly);
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddDbContext<DataContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

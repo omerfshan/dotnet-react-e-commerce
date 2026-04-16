@@ -1,6 +1,6 @@
 using Commerce.Core.DTO;
 
-namespace Commerce.Business.Services;
+namespace Commerce.Core.Interfaces;
 
 public interface ICartService
 {

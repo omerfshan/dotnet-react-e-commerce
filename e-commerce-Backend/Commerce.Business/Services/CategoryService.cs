@@ -1,4 +1,5 @@
 using Commerce.Core.DTO;
+using Commerce.Core.Interfaces;
 using Commerce.DataAccess;
 using Commerce.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,12 @@ public class CategoryService : ICategoryService
         _context = context;
     }
 
-    public async Task<IEnumerable<Category>> GetCategoriesAsync()
+    public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync()
     {
         return await _context.Categories
             .AsNoTracking()
             .OrderBy(c => c.Name)
+            .Select(c => new CategoryDto { CategoryId = c.Id, Name = c.Name })
             .ToListAsync();
     }
 

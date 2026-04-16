@@ -1,4 +1,5 @@
 using Commerce.Core.DTO;
+using Commerce.Core.Interfaces;
 using Commerce.DataAccess;
 using Commerce.Entity;
 using Commerce.Core.Exceptions;
@@ -69,7 +70,7 @@ public class ProductService : IProductService
         return product;
     }
 
-    public async Task<Product> CreateAsync(ProductCreateUpdateDto dto)
+    public async Task<int> CreateAsync(ProductCreateUpdateDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Name))
             throw new BadRequestException("Name zorunlu.");
@@ -99,7 +100,7 @@ public class ProductService : IProductService
 
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
-        return product;
+        return product.Id;
     }
 
     public async Task<bool> UpdateAsync(int id, ProductCreateUpdateDto dto)
