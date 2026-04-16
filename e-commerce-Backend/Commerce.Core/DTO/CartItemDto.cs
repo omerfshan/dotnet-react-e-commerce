@@ -1,6 +1,6 @@
-using Commerce.Entity;
 
-namespace Commerce.Business.DTO;
+
+namespace Commerce.Core.DTO;
 public class CartItemDto
 {
     public int ProductId { get; set; }

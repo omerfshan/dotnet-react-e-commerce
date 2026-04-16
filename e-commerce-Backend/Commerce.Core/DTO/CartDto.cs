@@ -1,5 +1,5 @@
-using Commerce.Entity;
-namespace Commerce.Business.DTO;
+
+namespace Commerce.Core.DTO;
 public class CartDto
 {
     public int CartId { get; set; }

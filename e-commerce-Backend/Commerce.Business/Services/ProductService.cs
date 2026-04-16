@@ -1,4 +1,4 @@
-using Commerce.Business.DTO;
+using Commerce.Core.DTO;
 using Commerce.DataAccess;
 using Commerce.Entity;
 using Commerce.Core.Exceptions;

@@ -1,4 +1,4 @@
-using Commerce.Business.DTO;
+using Commerce.Core.DTO;
 using Commerce.Entity;
 
 namespace Commerce.Business.Services;

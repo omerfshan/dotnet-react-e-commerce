@@ -1,4 +1,4 @@
-namespace Commerce.Business.DTO;
+namespace Commerce.Core.DTO;
 public class CategoryDto
 {
     public int CategoryId { get; set; }

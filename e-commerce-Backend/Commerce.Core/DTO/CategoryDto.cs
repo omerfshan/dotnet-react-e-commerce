@@ -1,4 +1,4 @@
-namespace Commerce.Business.DTO;
+namespace Commerce.Core.DTO;
 public class ProductListDto
 {
     public int Id { get; set; }

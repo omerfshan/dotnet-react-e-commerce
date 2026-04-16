@@ -1,4 +1,4 @@
-using Commerce.Business.DTO;
+using Commerce.Core.DTO;
 using Commerce.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 

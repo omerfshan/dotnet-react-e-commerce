@@ -1,5 +1,5 @@
 using Commerce.Entity;
-using Commerce.Business.DTO;
+using Commerce.Core.DTO;
 using AutoMapper;
 
 namespace Commerce.Business.Profiles

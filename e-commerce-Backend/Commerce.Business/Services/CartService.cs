@@ -1,5 +1,5 @@
 using AutoMapper;
-using Commerce.Business.DTO;
+using Commerce.Core.DTO;
 using Commerce.DataAccess;
 using Commerce.Core.Exceptions;
 using Commerce.Entity;
