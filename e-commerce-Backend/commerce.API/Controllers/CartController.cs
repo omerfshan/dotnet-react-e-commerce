@@ -16,7 +16,7 @@ public class CartController : ControllerBase
     {
         _cartService = cartService;
     }
-    [Authorize]
+
     [HttpGet]
     public async Task<ActionResult<CartDto>> GetCart()
     {
