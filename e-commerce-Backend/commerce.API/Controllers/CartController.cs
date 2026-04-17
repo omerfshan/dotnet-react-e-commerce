@@ -2,6 +2,7 @@ using Commerce.Core.DTO;
 using Commerce.Core.Interfaces;
 using Commerce.Business.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Commerce.API.Controllers;
 
@@ -15,7 +16,7 @@ public class CartController : ControllerBase
     {
         _cartService = cartService;
     }
-
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<CartDto>> GetCart()
     {
@@ -29,7 +30,7 @@ public class CartController : ControllerBase
 
         return Ok(cartDto);
     }
-
+ 
     [HttpPost]
     public async Task<ActionResult> AddItemToCart(int productId, int quantity)
     {
