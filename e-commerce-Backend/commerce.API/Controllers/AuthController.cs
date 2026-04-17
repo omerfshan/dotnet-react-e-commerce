@@ -15,14 +15,25 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-   [HttpPost("login")]
-public async Task<IActionResult> Login([FromBody] LoginDto dto)
-{
-    var result = await _authService.LoginAsync(dto);
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    {
+        var result = await _authService.LoginAsync(dto);
 
-    if (result == null)
-        return Unauthorized("Geçersiz giriş bilgileri.");
+        if (result == null)
+            return Unauthorized("Geçersiz giriş bilgileri.");
 
-    return Ok(result);
-}
+        return Ok(result);
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+    {
+        var result = await _authService.RegisterAsync(dto);
+
+        if (result == null)
+            return BadRequest("Kayıt işlemi başarısız.");
+
+        return Ok(result);
+    }
 }
