@@ -23,11 +23,11 @@ namespace Commerce.API.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("{categoryId:int}")]
-        public async Task<ActionResult<List<ProductListDto>>> GetProductsByCategory(int categoryId)
-        {
-            var products = await _categoryService.GetProductsByCategoryAsync(categoryId);
-            return Ok(products);
-        }
+        // [HttpGet("{categoryId:int}")]
+        // public async Task<ActionResult<List<ProductListDto>>> GetProductsByCategory(int categoryId)
+        // {
+        //     var products = await _categoryService.GetProductsByCategoryAsync(categoryId);
+        //     return Ok(products);
+        // }
     }
 }

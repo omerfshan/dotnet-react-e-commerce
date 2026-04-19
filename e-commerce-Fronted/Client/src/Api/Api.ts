@@ -80,7 +80,7 @@ const queries = {
 const Catalog = {
   list: () => queries.get("Products"),
   product_Details: (id: number) => queries.get(`Products/${id}`),
-  Category_details: (id: number) => queries.get(`Categories/${id}`),
+  Category_details: (id: number) => queries.get(`Products/${id}`),
 };
 
 const Errors = {

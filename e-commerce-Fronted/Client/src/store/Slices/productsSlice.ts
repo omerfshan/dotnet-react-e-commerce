@@ -43,7 +43,7 @@ export const fetchProductsByCategory = createAsyncThunk(
   "products/fetchByCategory",
   async (categoryId: number, { rejectWithValue }) => {
     try {
-      return await requests.Catalog.Category_details(categoryId) as IProduct[];
+      return await requests.Catalog.product_Details(categoryId) as IProduct[];
     } catch (err: any) {
       return rejectWithValue(err?.message ?? "Kategori ürünleri yüklenemedi");
     }
