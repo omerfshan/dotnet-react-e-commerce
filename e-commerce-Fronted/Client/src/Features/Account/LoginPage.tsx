@@ -21,6 +21,28 @@ const colors = {
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
+  // ✅ STATE
+  const [values, setValues] = useState({
+    email: "",
+    password: ""
+  });
+
+  // ✅ INPUT CHANGE
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  }
+
+  // ✅ SUBMIT
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    console.log("LOGIN DATA:", values);
+
+    // 🔥 burada backend çağıracaksın
+    // axios.post("/login", values)
+  }
+
   return (
     <Box
       sx={{
@@ -32,6 +54,8 @@ export default function LoginPage() {
       }}
     >
       <Paper
+        component="form" // ✅ form yaptık
+        onSubmit={handleSubmit}
         elevation={0}
         sx={{
           width: 400,
@@ -59,6 +83,9 @@ export default function LoginPage() {
         {/* Email */}
         <TextField
           fullWidth
+          name="email" // ❗ önemli
+          value={values.email}
+          onChange={handleInputChange}
           placeholder="E-posta adresi"
           variant="outlined"
           sx={{ mb: 2 }}
@@ -67,6 +94,9 @@ export default function LoginPage() {
         {/* Password */}
         <TextField
           fullWidth
+          name="password" // ❗ önemli
+          value={values.password}
+          onChange={handleInputChange}
           type={showPassword ? "text" : "password"}
           placeholder="Şifre"
           variant="outlined"
@@ -97,6 +127,7 @@ export default function LoginPage() {
 
         {/* Login Button */}
         <Button
+          type="submit" // ✅ ENTER ile submit çalışır
           fullWidth
           sx={{
             backgroundColor: colors.primary,
@@ -113,10 +144,6 @@ export default function LoginPage() {
         >
           Giriş Yap
         </Button>
-
-     
-
-       
       </Paper>
     </Box>
   );
