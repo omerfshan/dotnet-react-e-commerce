@@ -113,7 +113,12 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
         </Box>
 
         <Stack direction="row" spacing={1} sx={{ display: { xs: "none", md: "flex" } }}>
-          <Button startIcon={<PersonOutlineIcon />}>Hesabım</Button>
+        <Button
+          onClick={() => navigate("/login")}
+          startIcon={<PersonOutlineIcon />}
+        >
+          Hesabım
+        </Button>
           <Button
             startIcon={
               <Badge badgeContent={favoriteCount} color="error">

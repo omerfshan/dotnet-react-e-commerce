@@ -14,6 +14,7 @@ import HomePage from "../Features/Page/HomePage";
 import AboutPage from "../Features/Page/AboutPage";
 import ContactPage from "../Features/Page/ContactPage";
 import CatalogPage from "../Features/Page/CatalogPage";
+import LoginPage from "../Features/Account/LoginPage";
 
 
 
@@ -29,7 +30,7 @@ export const router = createBrowserRouter([
     children: [
       // home
       { index: true, element: <HomePage /> },
-
+       { path: "login", element: <LoginPage /> }, 
       // pages
       { path: "about", element: <AboutPage /> },
       { path: "contact", element: <ContactPage /> },
