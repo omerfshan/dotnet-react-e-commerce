@@ -26,14 +26,15 @@ export default function Header({ favoriteCount }: Props) {
     fetch("http://localhost:5232/api/categories")
       .then((res) => {
         if (!res.ok) throw new Error("Categories fetch failed: " + res.status);
+  
         return res.json();
       })
       .then((data) => {
-        // backend: { id, name }  -> frontend: { label }
-        const mapped: ICatagory[] = data.map((c: any) => ({
+              //  console.log("RAW DATA:", data); // ✅ ekle
+       const mapped: ICatagory[] = data.map((c: any) => ({
           label: c.name,
-          isNew:c.isNew,
-          id:c.id
+          isNew: c.isNew,
+          id: c.categoryId 
         }));
 
 

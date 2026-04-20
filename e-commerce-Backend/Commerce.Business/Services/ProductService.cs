@@ -16,29 +16,34 @@ public class ProductService : IProductService
         _context = context;
     }
 
-    public async Task<IEnumerable<ProductListDto>> GetAllAsync()
+  public async Task<IEnumerable<ProductListDto>> GetAllAsync(int? categoryId = null)
+{
+    var query = _context.Products
+        .AsNoTracking()
+        .Include(p => p.ProductCategories)
+            .ThenInclude(pc => pc.Category)
+        .AsQueryable();
+
+    if (categoryId.HasValue)
+        query = query.Where(p => p.ProductCategories
+            .Any(pc => pc.CategoryId == categoryId.Value));
+
+    return await query.Select(p => new ProductListDto
     {
-        return await _context.Products
-            .AsNoTracking()
-            .Include(p => p.ProductCategories)
-                .ThenInclude(pc => pc.Category)
-            .Select(p => new ProductListDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                IsActive = p.IsActive,
-                ImageUrl = p.ImageUrl,
-                Stock = p.Stock,
-                Categories = p.ProductCategories.Select(pc => new CategoryDto
-                {
-                    CategoryId = pc.CategoryId,
-                    Name = pc.Category.Name
-                }).ToList()
-            })
-            .ToListAsync();
-    }
+        Id = p.Id,
+        Name = p.Name,
+        Description = p.Description,
+        Price = p.Price,
+        IsActive = p.IsActive,
+        ImageUrl = p.ImageUrl,
+        Stock = p.Stock,
+        Categories = p.ProductCategories.Select(pc => new CategoryDto
+        {
+            CategoryId = pc.CategoryId,
+            Name = pc.Category.Name
+        }).ToList()
+    }).ToListAsync();
+}
 
     public async Task<ProductListDto?> GetByIdAsync(int id)
     {
