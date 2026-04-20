@@ -5,9 +5,13 @@ import { BASE_URL } from "./config";
 
 axios.defaults.baseURL = `${BASE_URL}/api/`;
 axios.defaults.withCredentials=true;
-axios.interceptors.response.use(
-  (response) => response,
+axios.interceptors.response.use(  
+   (response) => {
+    console.log("✅ API SUCCESS:", response.config.url, response.data);
+    return response;
+  },
   (error: AxiosError) => {
+    
     const res = error.response as AxiosResponse | undefined;
 
     if (!res) {
@@ -93,15 +97,21 @@ const Errors = {
 const Cart={
  
   addItem: (productId: number, quantity: number = 1) =>queries.post(`Cart?productId=${productId}&quantity=${quantity}`, {}),
-   deleteItem: (productId: number, quantity: number = 1) =>queries.delete(`Cart?productId=${productId}&quantity=${quantity}`),
-   getCart:()=> queries.get('Cart'),
+  deleteItem: (productId: number, quantity: number = 1) =>queries.delete(`Cart?productId=${productId}&quantity=${quantity}`),
+  getCart:()=> queries.get('Cart'),
 }
-
+const Auth = {
+  login: (data: { email: string; password: string }) =>
+    queries.post("Auth/login", data),
+  register: (data: { email: string; password: string; username: string }) =>
+    queries.post("Auth/register", data),
+};
 
 const requests = {
   Catalog,
   Errors,
-  Cart
+  Cart,
+  Auth
 };
 
 export default requests;
