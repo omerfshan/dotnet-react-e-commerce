@@ -13,7 +13,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import requests from "../../Api/Api";
+import { useDispatch } from "react-redux";
+import { loginAsync } from "./accountSlice";
+import type { AppDispatch } from "../../store/store";
 
 
 const colors = {
@@ -31,6 +33,7 @@ type LoginFormValues = {
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     register,
@@ -40,7 +43,7 @@ export default function LoginPage() {
 
   async function onSubmit(data: LoginFormValues) {
     try {
-      await requests.Auth.login(data);
+      await dispatch(loginAsync(data)).unwrap();
       toast.success("Giriş başarılı!");
       navigate("/");
     } catch (err) {

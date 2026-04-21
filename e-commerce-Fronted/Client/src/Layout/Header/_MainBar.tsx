@@ -4,17 +4,16 @@ import {
   Container,
   Typography,
   IconButton,
-  Button,
   InputBase,
   Badge,
   Stack,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/ hooks";
+import AccountMenu from "./_AccountMenu";
 
 
 type Props = {
@@ -25,9 +24,9 @@ type Props = {
 
 export default function MainBar({ primary, softBg, favoriteCount }: Props) {
   const navigate = useNavigate();
-  const cart = useAppSelector((state) => state.cart.cart); // ✅ değişti
-
-  const cartCount = cart?.cartItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+  const cart = useAppSelector((state) => state.cart.cart);
+  const cartCount =
+    cart?.cartItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
 
   const badgeStyle = {
     "& .MuiBadge-badge": {
@@ -52,6 +51,7 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           flexWrap: { xs: "wrap", md: "nowrap" },
         }}
       >
+        {/* ── Logo ── */}
         <Typography
           component={NavLink}
           to={"/"}
@@ -69,20 +69,25 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           NOVA
         </Typography>
 
+        {/* ── Mobile icon row ── */}
         <Box
           sx={{
             display: { xs: "flex", md: "none" },
             ml: "auto",
             gap: 0.5,
             order: { xs: 2, md: 0 },
+            alignItems: "center",
           }}
         >
-          <IconButton size="small"><PersonOutlineIcon /></IconButton>
+          {/* AccountMenu compact (icon only) */}
+          <AccountMenu primary={primary} softBg={softBg} compact />
+
           <IconButton size="small">
             <Badge badgeContent={favoriteCount} color="error">
               <FavoriteBorderIcon />
             </Badge>
           </IconButton>
+
           <IconButton size="small" onClick={() => navigate("/cart")}>
             <Badge badgeContent={cartCount} sx={badgeStyle}>
               <ShoppingCartOutlinedIcon sx={{ color: primary }} />
@@ -90,6 +95,7 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           </IconButton>
         </Box>
 
+        {/* ── Search bar ── */}
         <Box
           sx={{
             flexGrow: { xs: 0, md: 1 },
@@ -112,32 +118,33 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           </IconButton>
         </Box>
 
-        <Stack direction="row" spacing={1} sx={{ display: { xs: "none", md: "flex" } }}>
-        <Button
-          onClick={() => navigate("/login")}
-          startIcon={<PersonOutlineIcon />}
+        {/* ── Desktop action row ── */}
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
         >
-          Hesabım
-        </Button>
-          <Button
-            startIcon={
-              <Badge badgeContent={favoriteCount} color="error">
-                <FavoriteBorderIcon />
-              </Badge>
-            }
+          {/* AccountMenu full (text button + dropdown) */}
+          <AccountMenu primary={primary} softBg={softBg} />
+
+          <IconButton
+            sx={{ borderRadius: 999, px: 1.5 }}
+            disableRipple
           >
-            Favoriler
-          </Button>
-          <Button
+            <Badge badgeContent={favoriteCount} color="error">
+              <FavoriteBorderIcon />
+            </Badge>
+          </IconButton>
+
+          <IconButton
             onClick={() => navigate("/cart")}
-            startIcon={
-              <Badge badgeContent={cartCount} sx={badgeStyle}>
-                <ShoppingCartOutlinedIcon />
-              </Badge>
-            }
+            sx={{ borderRadius: 999, px: 1.5 }}
+            disableRipple
           >
-            Sepet
-          </Button>
+            <Badge badgeContent={cartCount} sx={badgeStyle}>
+              <ShoppingCartOutlinedIcon />
+            </Badge>
+          </IconButton>
         </Stack>
       </Toolbar>
     </Container>
