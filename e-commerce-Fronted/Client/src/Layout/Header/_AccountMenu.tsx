@@ -14,18 +14,8 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { useNavigate } from "react-router-dom";
-
-// ──────────────────────────────────────────────
-// Auth hook — replace with your real auth logic
-// ──────────────────────────────────────────────
-function useAuth() {
-  // Swap this with your Redux selector / context:
-  // const user = useAppSelector((state) => state.auth.user);
-  const user = null as { name: string; email: string } | null;
-  // Example logged-in state for testing:
-  // const user = { name: "Ahmet Yılmaz", email: "ahmet@example.com" };
-  return { user };
-}
+import { useAppDispatch, useAppSelector } from "../../store/ hooks";
+import { logoutAsync } from "../../Features/Account/accountSlice";
 
 type Props = {
   primary: string;
@@ -36,7 +26,8 @@ type Props = {
 
 export default function AccountMenu({ primary, softBg, compact = false }: Props) {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.account.user);
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
 
@@ -52,16 +43,16 @@ export default function AccountMenu({ primary, softBg, compact = false }: Props)
     return () => document.removeEventListener("mousedown", handleClick);
   }, [open]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setOpen(false);
-    // dispatch(logout()); // your logout action here
+    await dispatch(logoutAsync());
     navigate("/");
   };
 
   const trigger = compact ? (
     /* ── Mobile icon button ── */
     <IconButton size="small" onClick={() => setOpen((v) => !v)}>
-      <PersonOutlineIcon />
+      <PersonOutlineIcon sx={{ color: user ? primary : "inherit" }} />
     </IconButton>
   ) : (
     /* ── Desktop text button ── */
@@ -70,14 +61,14 @@ export default function AccountMenu({ primary, softBg, compact = false }: Props)
       onClick={() => setOpen((v) => !v)}
       sx={{
         fontWeight: 700,
-        color: open ? primary : "inherit",
+        color: open || user ? primary : "inherit",
         textTransform: "none",
         borderRadius: 999,
         px: 1.5,
         "&:hover": { color: primary, bgcolor: softBg },
       }}
     >
-      Hesabım
+      {user ? (user.firstName || user.userName || "Hesabım") : "Hesabım"}
     </Button>
   );
 
@@ -122,11 +113,13 @@ export default function AccountMenu({ primary, softBg, compact = false }: Props)
                     <Typography
                       sx={{ fontWeight: 800, fontSize: 14, lineHeight: 1.2 }}
                     >
-                      {user.name}
+                      {user.userName || user.firstName || "Kullanıcı"}
                     </Typography>
-                    <Typography sx={{ fontSize: 11, color: "#9CA3AF" }}>
-                      {user.email}
-                    </Typography>
+                    {user.email && (
+                      <Typography sx={{ fontSize: 11, color: "#9CA3AF" }}>
+                        {user.email}
+                      </Typography>
+                    )}
                   </Box>
                 </Box>
               </Box>

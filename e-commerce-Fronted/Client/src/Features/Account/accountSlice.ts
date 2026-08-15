@@ -1,9 +1,11 @@
- import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import requests from "../../Api/Api";
 
-type User = {
-  email: string;
+export type User = {
+  email?: string;
   token: string;
+  userName?: string;
+  firstName?: string;
 };
 
 type AccountState = {
@@ -11,8 +13,10 @@ type AccountState = {
   status: "idle" | "loading" | "failed";
 };
 
+const storedUser = localStorage.getItem("user");
+
 const initialState: AccountState = {
-  user: null,
+  user: storedUser ? JSON.parse(storedUser) : null,
   status: "idle",
 };
 
@@ -20,11 +24,28 @@ export const loginAsync = createAsyncThunk(
   "account/login",
   async (data: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      const user = await requests.Auth.login(data);
+      const response = await requests.Auth.login(data);
+      const user: User = {
+        ...response,
+        email: data.email,
+      };
       localStorage.setItem("user", JSON.stringify(user));
       return user;
     } catch (err) {
       return rejectWithValue(err);
+    }
+  }
+);
+
+export const logoutAsync = createAsyncThunk(
+  "account/logout",
+  async (_, { dispatch }) => {
+    try {
+      await requests.Auth.logout();
+    } catch (err) {
+      console.log("Logout error:", err);
+    } finally {
+      dispatch(logout());
     }
   }
 );

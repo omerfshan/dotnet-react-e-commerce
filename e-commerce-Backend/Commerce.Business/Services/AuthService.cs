@@ -17,17 +17,18 @@ public class AuthService : IAuthService
     }
 
     public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
-{
-    var user = await _userManager.FindByEmailAsync(dto.Email);
-    if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
-        return null;
-    var roles = await _userManager.GetRolesAsync(user);
-    return new AuthResponseDto
     {
-        Token = _tokenService.GenerateToken(user.Id, user.Email!, user.FirstName, user.LastName, roles),
-        UserName = $"{user.FirstName} {user.LastName}" 
-    };
-}
+        var user = await _userManager.FindByEmailAsync(dto.Email);
+        if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
+            return null;
+        var roles = await _userManager.GetRolesAsync(user);
+        return new AuthResponseDto
+        {
+            Token = _tokenService.GenerateToken(user.Id, user.Email!, user.FirstName, user.LastName, roles),
+            UserName = $"{user.FirstName} {user.LastName}",
+            FirstName = user.FirstName
+        };
+    }
 
     public async Task<AuthResponseDto?> RegisterAsync(RegisterDto dto)
     {
@@ -47,7 +48,9 @@ public class AuthService : IAuthService
 
         return new AuthResponseDto
         {
-            Token = _tokenService.GenerateToken(user.Id, user.Email!, user.FirstName, user.LastName, roles)
+            Token = _tokenService.GenerateToken(user.Id, user.Email!, user.FirstName, user.LastName, roles),
+            UserName = $"{user.FirstName} {user.LastName}",
+            FirstName = user.FirstName
         };
     }
 }

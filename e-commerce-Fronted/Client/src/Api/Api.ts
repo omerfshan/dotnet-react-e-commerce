@@ -105,6 +105,7 @@ const Auth = {
     queries.post("Auth/login", data),
   register: (data: { email: string; password: string; username: string }) =>
     queries.post("Auth/register", data),
+  logout: () => queries.post("Auth/logout", {}),
 };
 
 const requests = {
