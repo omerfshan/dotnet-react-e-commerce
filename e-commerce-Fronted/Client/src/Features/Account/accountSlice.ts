@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import requests from "../../Api/Api";
+import { clearCart } from "../../store/Slices/cartSlice";
+import { clearFavoritesLocal } from "../../store/Slices/favoriteSlice";
 
 export type User = {
   email?: string;
@@ -46,6 +48,28 @@ export const logoutAsync = createAsyncThunk(
       console.log("Logout error:", err);
     } finally {
       dispatch(logout());
+      dispatch(clearCart());
+      dispatch(clearFavoritesLocal());
+    }
+  }
+);
+
+export const registerAsync = createAsyncThunk(
+  "account/register",
+  async (
+    data: { email: string; password: string; firstName: string; lastName: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await requests.Auth.register(data);
+      const user: User = {
+        ...response,
+        email: data.email,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+      return user;
+    } catch (err) {
+      return rejectWithValue(err);
     }
   }
 );
@@ -72,6 +96,16 @@ export const accountSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(loginAsync.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(registerAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(registerAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.user = action.payload;
+      })
+      .addCase(registerAsync.rejected, (state) => {
         state.status = "failed";
       });
   },

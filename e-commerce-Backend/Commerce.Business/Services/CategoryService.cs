@@ -24,12 +24,12 @@ public class CategoryService : ICategoryService
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<ProductListDto>> GetProductsByCategoryAsync(int categoryId)
+    public async Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId)
     {
         return await _context.Products
             .AsNoTracking()
             .Where(p => p.ProductCategories.Any(pc => pc.CategoryId == categoryId))
-            .Select(p => new ProductListDto
+            .Select(p => new ProductDto
             {
                 Id = p.Id,
                 Name = p.Name,

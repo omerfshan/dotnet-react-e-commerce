@@ -1,31 +1,48 @@
 import { IconButton, Chip } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import colors from "../../theme/color";
+import type { IProduct } from "../../Model/IProduct";
+import { useAppDispatch, useAppSelector } from "../../store/ hooks";
+import { toggleFavoriteAsync } from "../../store/Slices/favoriteSlice";
 
-// type Props = {
-  
-// };
+type Props = {
+  product: IProduct;
+};
 
-export default function ProductActions() {
+export default function ProductActions({ product }: Props) {
+  const dispatch = useAppDispatch();
+  const favoriteItems = useAppSelector((state) => state.favorite.items);
+  const isFavorite = favoriteItems.some((item) => item.id === product.id);
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch(toggleFavoriteAsync(product));
+  };
 
   return (
     <>
       {/* FAVORI */}
       <IconButton   
+        onClick={handleFavoriteClick}
         sx={{
           position: "absolute",
           top: 8,
           right: 8,
-          bgcolor: colors.softBg,
+          bgcolor: isFavorite ? "rgba(239, 68, 68, 0.1)" : colors.softBg,
           zIndex: 2,
-          color: colors.primary,
+          color: isFavorite ? "#EF4444" : colors.primary,
           "&:hover": {
-            bgcolor: colors.primary,
+            bgcolor: isFavorite ? "#EF4444" : colors.primary,
             color: "#fff",
           },
         }}
       >
-        <FavoriteBorderIcon fontSize="small" />
+        {isFavorite ? (
+          <FavoriteIcon fontSize="small" />
+        ) : (
+          <FavoriteBorderIcon fontSize="small" />
+        )}
       </IconButton>
 
       {/* BADGE */}

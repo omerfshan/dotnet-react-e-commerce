@@ -15,15 +15,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { loginAsync } from "./accountSlice";
+import { fetchCart } from "../../store/Slices/cartSlice";
+import { fetchFavorites } from "../../store/Slices/favoriteSlice";
 import type { AppDispatch } from "../../store/store";
 
 
-const colors = {
-  primary: "#5B2EFF",
-  primaryHover: "#7C5CFF",
-  softBg: "#F6F7FB",
-  newBadge: "#10B981",
-};
+import colors from "../../theme/color";
 
 type LoginFormValues = {
   email: string;
@@ -44,6 +41,8 @@ export default function LoginPage() {
   async function onSubmit(data: LoginFormValues) {
     try {
       await dispatch(loginAsync(data)).unwrap();
+      await dispatch(fetchCart());
+      await dispatch(fetchFavorites());
       toast.success("Giriş başarılı!");
       navigate("/");
     } catch (err) {
@@ -145,7 +144,7 @@ export default function LoginPage() {
             borderRadius: 3,
             fontWeight: 600,
             textTransform: "none",
-            mb: 2,
+            mb: 2.5,
             "&:hover": {
               backgroundColor: colors.primaryHover,
             },
@@ -153,6 +152,28 @@ export default function LoginPage() {
         >
           {isSubmitting ? "Giriş yapılıyor..." : "Giriş Yap"}
         </Button>
+
+        {/* Register Link */}
+        <Typography
+          variant="body2"
+          textAlign="center"
+          sx={{ color: "#6B7280" }}
+        >
+          Hesabınız yok mu?{" "}
+          <Typography
+            component="span"
+            variant="body2"
+            onClick={() => navigate("/register")}
+            sx={{
+              color: colors.primary,
+              fontWeight: 700,
+              cursor: "pointer",
+              "&:hover": { textDecoration: "underline" },
+            }}
+          >
+            Kayıt Ol
+          </Typography>
+        </Typography>
       </Paper>
     </Box>
   );

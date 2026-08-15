@@ -6,15 +6,22 @@ import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { fetchCart } from "../store/Slices/cartSlice"; 
-import { useAppDispatch } from "../store/ hooks";
+import { fetchFavorites } from "../store/Slices/favoriteSlice";
+import { useAppDispatch, useAppSelector } from "../store/ hooks";
 
 
 export default function App() {
   const dispatch = useAppDispatch(); 
+  const user = useAppSelector((state) => state.account.user);
 
   useEffect(() => {
-    dispatch(fetchCart()); 
-  }, []);
+    dispatch(fetchCart());
+    if (user) {
+      dispatch(fetchFavorites());
+    } else {
+      // Misafir moddaysa yerel favorileri sıfırlama ama DB çekimi yapma
+    }
+  }, [user, dispatch]);
 
   return (
     <>

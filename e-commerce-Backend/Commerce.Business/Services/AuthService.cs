@@ -53,4 +53,46 @@ public class AuthService : IAuthService
             FirstName = user.FirstName
         };
     }
+
+    public async Task<UserProfileDto?> GetProfileAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return null;
+
+        return new UserProfileDto
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email ?? string.Empty,
+            PhoneNumber = user.PhoneNumber,
+            AddressTitle = user.AddressTitle,
+            FullAddress = user.FullAddress,
+            City = user.City
+        };
+    }
+
+    public async Task<bool> UpdateProfileAsync(string userId, UpdateProfileDto dto)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return false;
+
+        user.FirstName = dto.FirstName;
+        user.LastName = dto.LastName;
+        user.PhoneNumber = dto.PhoneNumber;
+        user.AddressTitle = dto.AddressTitle;
+        user.FullAddress = dto.FullAddress;
+        user.City = dto.City;
+
+        var result = await _userManager.UpdateAsync(user);
+        return result.Succeeded;
+    }
+
+    public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordDto dto)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return false;
+
+        var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+        return result.Succeeded;
+    }
 }

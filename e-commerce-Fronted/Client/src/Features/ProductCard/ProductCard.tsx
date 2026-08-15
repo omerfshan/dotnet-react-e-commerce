@@ -36,7 +36,7 @@ export default function ProductCard({ product, }: Props) {
     >
       {/* ⚠️ FAVORI BUTONU TIKLANINCA SAYFAYA GİTMESİN */}
       <div onClick={(e) => e.stopPropagation()}>
-        <ProductActions  />
+        <ProductActions product={product} />
       </div>
 
       <ProductImage imageUrl={product.imageUrl} name={product.name} />

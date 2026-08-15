@@ -4,7 +4,23 @@ import { toast } from "react-toastify";
 import { BASE_URL } from "./config";
 
 axios.defaults.baseURL = `${BASE_URL}/api/`;
-axios.defaults.withCredentials=true;
+axios.defaults.withCredentials = true;
+
+axios.interceptors.request.use((config) => {
+  const user = localStorage.getItem("user");
+  if (user) {
+    try {
+      const token = JSON.parse(user).token;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    } catch (e) {
+      console.error("Token parse error", e);
+    }
+  }
+  return config;
+});
+
 axios.interceptors.response.use(  
    (response) => {
     console.log("✅ API SUCCESS:", response.config.url, response.data);
@@ -40,13 +56,14 @@ axios.interceptors.response.use(
 
     // ✅ 400 → SADECE TOAST
     if (status === 400) {
-      toast.error((data as any)?.title || "Bad Request");
+      toast.error((data as any)?.title || (data as any)?.message || "Bad Request");
       return Promise.reject(res);
     }
 
     // ✅ DİĞERLERİ ROUTE
     switch (status) {
       case 401:
+        localStorage.removeItem("user");
         router.navigate("/unauthorized", { state: { error: data, status } });
         break;
 
@@ -55,11 +72,11 @@ axios.interceptors.response.use(
         break;
 
       case 500:
+      case 505:
         router.navigate("/server-error", { state: { error: data, status } });
         break;
 
       default:
-        // diğer statuslar için hiçbir şey yapma (redirect istemiyorsun)
         break;
     }
 
@@ -103,16 +120,53 @@ const Cart={
 const Auth = {
   login: (data: { email: string; password: string }) =>
     queries.post("Auth/login", data),
-  register: (data: { email: string; password: string; username: string }) =>
+  register: (data: { email: string; password: string; firstName: string; lastName: string }) =>
     queries.post("Auth/register", data),
   logout: () => queries.post("Auth/logout", {}),
+};
+
+const Account = {
+  getProfile: () => queries.get("Auth/profile"),
+  updateProfile: (data: {
+    firstName: string;
+    lastName: string;
+    phoneNumber?: string;
+    addressTitle?: string;
+    fullAddress?: string;
+    city?: string;
+  }) => queries.put("Auth/profile", data),
+  changePassword: (data: { currentPassword: string; newPassword: string }) =>
+    queries.post("Auth/change-password", data),
+};
+
+const Favorites = {
+  getFavorites: () => queries.get("Favorites"),
+  addFavorite: (productId: number) => queries.post(`Favorites/${productId}`, {}),
+  removeFavorite: (productId: number) => queries.delete(`Favorites/${productId}`),
+};
+
+const Orders = {
+  getOrders: () => queries.get("Orders"),
+  getOrderById: (id: number) => queries.get(`Orders/${id}`),
+  createOrder: (data: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    addressTitle: string;
+    city: string;
+    fullAddress: string;
+    shippingOption: string;
+  }) => queries.post("Orders", data),
 };
 
 const requests = {
   Catalog,
   Errors,
   Cart,
-  Auth
+  Auth,
+  Account,
+  Favorites,
+  Orders,
 };
 
 export default requests;

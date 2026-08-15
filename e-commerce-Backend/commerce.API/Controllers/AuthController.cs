@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Commerce.Core.DTO;
 using Commerce.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace commerce.API.Controllers;
@@ -41,5 +43,44 @@ public class AuthController : ControllerBase
     public IActionResult Logout()
     {
         return Ok(new { message = "Çıkış başarılı." });
+    }
+
+    [Authorize]
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfile()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var profile = await _authService.GetProfileAsync(userId);
+        if (profile == null) return NotFound("Profil bulunamadı.");
+
+        return Ok(profile);
+    }
+
+    [Authorize]
+    [HttpPut("profile")]
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto dto)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var success = await _authService.UpdateProfileAsync(userId, dto);
+        if (!success) return BadRequest("Profil güncelleme başarısız.");
+
+        return Ok(new { message = "Profil başarıyla güncellendi." });
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+        var success = await _authService.ChangePasswordAsync(userId, dto);
+        if (!success) return BadRequest("Şifre değiştirme başarısız. Mevcut şifrenizi ve yeni şifre kurallarını kontrol ediniz.");
+
+        return Ok(new { message = "Şifreniz başarıyla değiştirildi." });
     }
 }

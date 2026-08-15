@@ -16,7 +16,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { CircularProgress } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { toggleFavoriteAsync } from "../../../store/Slices/favoriteSlice";
+import { useAppSelector } from "../../../store/ hooks";
 
 import { increaseCartItem } from "../../../store/Slices/cartSlice"; // ✅ değişti
 import colors from "../../../theme/color";
@@ -60,6 +63,9 @@ export default function ProductBuyPanel({
   const dispatch = useAppDispatch();                             // ✅ değişti
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const favoriteItems = useAppSelector((state) => state.favorite.items);
+  const isFavorite = favoriteItems.some((item) => item.id === product.id);
 
   const handleAddToCart = async () => {
     setLoading(true);
@@ -214,14 +220,14 @@ export default function ProductBuyPanel({
               py: 1.1,
               borderRadius: 999,
               fontWeight: 900,
-              color: "rgba(0,0,0,0.75)",
+              color: isFavorite ? "#EF4444" : "rgba(0,0,0,0.75)",
               textTransform: "none",
               "&:hover": { bgcolor: "rgba(0,0,0,0.04)" },
             }}
-            startIcon={<FavoriteBorderIcon />}
-            onClick={() => console.log("watch", product.id)}
+            startIcon={isFavorite ? <FavoriteIcon sx={{ color: "#EF4444" }} /> : <FavoriteBorderIcon />}
+            onClick={() => dispatch(toggleFavoriteAsync(product))}
           >
-            Favoriye Ekle
+            {isFavorite ? "Favorilerden Çıkar" : "Favoriye Ekle"}
           </Button>
         </Stack>
 

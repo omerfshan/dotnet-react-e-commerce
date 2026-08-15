@@ -58,6 +58,29 @@ public class CartService : ICartService
         throw new BadRequestException("Ürün sepetten silinemedi.");
     }
 
+    public async Task MergeCartsAsync(string userCustomerId, string anonymousCustomerId)
+    {
+        if (string.IsNullOrEmpty(userCustomerId) || string.IsNullOrEmpty(anonymousCustomerId) || userCustomerId == anonymousCustomerId)
+            return;
+
+        var anonCart = await _context.Carts
+            .Include(c => c.CartItems)
+            .FirstOrDefaultAsync(c => c.CustomerId == anonymousCustomerId);
+
+        if (anonCart == null || !anonCart.CartItems.Any())
+            return;
+
+        var (userCart, _) = await GetOrCreateAsync(userCustomerId);
+
+        foreach (var item in anonCart.CartItems)
+        {
+            userCart.AddItem(item.ProductId, item.Quantity);
+        }
+
+        _context.Carts.Remove(anonCart);
+        await _context.SaveChangesAsync();
+    }
+
     private async Task<(Cart cart, string? newCustomerId)> GetOrCreateAsync(string? customerId)
     {
         Cart? cart = null;
@@ -73,8 +96,12 @@ public class CartService : ICartService
 
         if (cart is null)
         {
-            newCustomerId = Guid.NewGuid().ToString();
-            cart = new Cart { CustomerId = newCustomerId };
+            var idToUse = !string.IsNullOrEmpty(customerId) ? customerId : Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(customerId))
+            {
+                newCustomerId = idToUse;
+            }
+            cart = new Cart { CustomerId = idToUse };
             _context.Carts.Add(cart);
             await _context.SaveChangesAsync();
         }

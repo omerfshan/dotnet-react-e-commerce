@@ -1,4 +1,5 @@
 using Commerce.Entity;
+using Commerce.Entity.Entities;
 using Commerce.Entity.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,17 @@ namespace Commerce.DataAccess
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
         public DbSet<Cart> Carts => Set<Cart>();
+        public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
+        public DbSet<Order> Orders => Set<Order>();
+        public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Identity tablolarını oluşturur
+
+            modelBuilder.Entity<UserFavorite>()
+                .HasIndex(uf => new { uf.UserId, uf.ProductId })
+                .IsUnique();
 
             modelBuilder.Entity<ProductCategory>()
                 .HasKey(pc => new { pc.ProductId, pc.CategoryId });

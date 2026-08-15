@@ -1,10 +1,11 @@
 import { Box, Paper, Typography, Button } from "@mui/material";
 import colors from "../../theme/color";
 import { useAppSelector } from "../../store/ hooks";
-
+import { useNavigate } from "react-router-dom";
 
 export default function CartSummaryPanel() {
-  const cart = useAppSelector((state) => state.cart.cart); // ✅ değişti
+  const navigate = useNavigate();
+  const cart = useAppSelector((state) => state.cart.cart);
 
   const totalPrice = cart?.cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity, 0
@@ -25,6 +26,7 @@ export default function CartSummaryPanel() {
         <Button
           variant="contained"
           fullWidth
+          onClick={() => navigate("/checkout")}
           sx={{
             mt: 2,
             bgcolor: colors.primary,

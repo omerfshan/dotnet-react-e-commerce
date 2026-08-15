@@ -22,9 +22,11 @@ type Props = {
   favoriteCount: number;
 };
 
-export default function MainBar({ primary, softBg, favoriteCount }: Props) {
+export default function MainBar({ primary, softBg }: Props) {
   const navigate = useNavigate();
   const cart = useAppSelector((state) => state.cart.cart);
+  const favorites = useAppSelector((state) => state.favorite.items);
+  const favCount = favorites.length;
   const cartCount =
     cart?.cartItems.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
 
@@ -82,8 +84,8 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           {/* AccountMenu compact (icon only) */}
           <AccountMenu primary={primary} softBg={softBg} compact />
 
-          <IconButton size="small">
-            <Badge badgeContent={favoriteCount} color="error">
+          <IconButton size="small" onClick={() => navigate("/favorites")}>
+            <Badge badgeContent={favCount} color="error">
               <FavoriteBorderIcon />
             </Badge>
           </IconButton>
@@ -128,10 +130,11 @@ export default function MainBar({ primary, softBg, favoriteCount }: Props) {
           <AccountMenu primary={primary} softBg={softBg} />
 
           <IconButton
+            onClick={() => navigate("/favorites")}
             sx={{ borderRadius: 999, px: 1.5 }}
             disableRipple
           >
-            <Badge badgeContent={favoriteCount} color="error">
+            <Badge badgeContent={favCount} color="error">
               <FavoriteBorderIcon />
             </Badge>
           </IconButton>

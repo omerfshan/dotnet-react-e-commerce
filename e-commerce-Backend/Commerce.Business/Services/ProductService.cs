@@ -16,43 +16,43 @@ public class ProductService : IProductService
         _context = context;
     }
 
-  public async Task<IEnumerable<ProductListDto>> GetAllAsync(int? categoryId = null)
-{
-    var query = _context.Products
-        .AsNoTracking()
-        .Include(p => p.ProductCategories)
-            .ThenInclude(pc => pc.Category)
-        .AsQueryable();
-
-    if (categoryId.HasValue)
-        query = query.Where(p => p.ProductCategories
-            .Any(pc => pc.CategoryId == categoryId.Value));
-
-    return await query.Select(p => new ProductListDto
+    public async Task<IEnumerable<ProductDto>> GetAllAsync(int? categoryId = null)
     {
-        Id = p.Id,
-        Name = p.Name,
-        Description = p.Description,
-        Price = p.Price,
-        IsActive = p.IsActive,
-        ImageUrl = p.ImageUrl,
-        Stock = p.Stock,
-        Categories = p.ProductCategories.Select(pc => new CategoryDto
-        {
-            CategoryId = pc.CategoryId,
-            Name = pc.Category.Name
-        }).ToList()
-    }).ToListAsync();
-}
+        var query = _context.Products
+            .AsNoTracking()
+            .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category)
+            .AsQueryable();
 
-    public async Task<ProductListDto?> GetByIdAsync(int id)
+        if (categoryId.HasValue)
+            query = query.Where(p => p.ProductCategories
+                .Any(pc => pc.CategoryId == categoryId.Value));
+
+        return await query.Select(p => new ProductDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Price = p.Price,
+            IsActive = p.IsActive,
+            ImageUrl = p.ImageUrl,
+            Stock = p.Stock,
+            Categories = p.ProductCategories.Select(pc => new CategoryDto
+            {
+                CategoryId = pc.CategoryId,
+                Name = pc.Category.Name
+            }).ToList()
+        }).ToListAsync();
+    }
+
+    public async Task<ProductDto?> GetByIdAsync(int id)
     {
         var product = await _context.Products
             .AsNoTracking()
             .Include(p => p.ProductCategories)
                 .ThenInclude(pc => pc.Category)
             .Where(p => p.Id == id)
-            .Select(p => new ProductListDto
+            .Select(p => new ProductDto
             {
                 Id = p.Id,
                 Name = p.Name,

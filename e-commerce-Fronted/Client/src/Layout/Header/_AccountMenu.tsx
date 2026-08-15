@@ -13,6 +13,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import HomeIcon from "@mui/icons-material/Home";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/ hooks";
 import { logoutAsync } from "../../Features/Account/accountSlice";
@@ -129,8 +132,29 @@ export default function AccountMenu({ primary, softBg, compact = false }: Props)
               <Box sx={{ p: 1 }}>
                 <MenuItem
                   icon={<PersonOutlineIcon fontSize="small" />}
-                  label="Profilim"
-                  onClick={() => { setOpen(false); navigate("/profile"); }}
+                  label="Profil Bilgileri"
+                  onClick={() => { setOpen(false); navigate("/profile", { state: { tab: 0 } }); }}
+                  primary={primary}
+                  softBg={softBg}
+                />
+                <MenuItem
+                  icon={<HomeIcon fontSize="small" />}
+                  label="Adreslerim"
+                  onClick={() => { setOpen(false); navigate("/profile", { state: { tab: 1 } }); }}
+                  primary={primary}
+                  softBg={softBg}
+                />
+                <MenuItem
+                  icon={<ShoppingBagIcon fontSize="small" />}
+                  label="Siparişlerim"
+                  onClick={() => { setOpen(false); navigate("/profile", { state: { tab: 2 } }); }}
+                  primary={primary}
+                  softBg={softBg}
+                />
+                <MenuItem
+                  icon={<LockIcon fontSize="small" />}
+                  label="Güvenlik & Şifre"
+                  onClick={() => { setOpen(false); navigate("/profile", { state: { tab: 3 } }); }}
                   primary={primary}
                   softBg={softBg}
                 />

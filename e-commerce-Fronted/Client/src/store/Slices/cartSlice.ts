@@ -64,7 +64,13 @@ const allCartThunks = [fetchCart, addToCart, increaseCartItem, decreaseCartItem,
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCart: (state) => {
+      state.cart = null;
+      state.status = "idle";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     allCartThunks.forEach((thunk) => {
       builder
@@ -85,4 +91,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { clearCart } = cartSlice.actions;
 export default cartSlice.reducer;
