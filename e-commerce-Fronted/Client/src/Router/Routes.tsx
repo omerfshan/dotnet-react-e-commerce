@@ -19,6 +19,7 @@ import RegisterPage from "../Features/Account/RegisterPage";
 import ProfilePage from "../Features/Account/ProfilePage";
 import FavoritesPage from "../Features/Page/FavoritesPage";
 import CheckoutPage from "../Features/Checkout/CheckoutPage";
+import AdminDashboardPage from "../Features/Admin/AdminDashboardPage";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
       { path: "register", element: <RegisterPage /> },
       { path: "profile", element: <ProfilePage /> },
       { path: "favorites", element: <FavoritesPage /> },
+      { path: "admin", element: <AdminDashboardPage /> },
 
       // pages
       { path: "about", element: <AboutPage /> },

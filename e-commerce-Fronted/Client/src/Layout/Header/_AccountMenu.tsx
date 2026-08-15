@@ -16,6 +16,7 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import HomeIcon from "@mui/icons-material/Home";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import LockIcon from "@mui/icons-material/Lock";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/ hooks";
 import { logoutAsync } from "../../Features/Account/accountSlice";
@@ -130,6 +131,45 @@ export default function AccountMenu({ primary, softBg, compact = false }: Props)
               <Divider />
 
               <Box sx={{ p: 1 }}>
+                {user.roles?.some(r => r === "Admin" || r === "Worker") && (
+                  <>
+                    <Typography variant="caption" sx={{ px: 2, pt: 1, pb: 0.5, display: "block", color: "text.secondary", fontWeight: 700 }}>
+                      YÖNETİM
+                    </Typography>
+                    <MenuItem
+                      icon={<AdminPanelSettingsIcon fontSize="small" />}
+                      label="Yönetim Paneli"
+                      onClick={() => { setOpen(false); navigate("/admin"); }}
+                      primary={primary}
+                      softBg={softBg}
+                    />
+                    <MenuItem
+                      icon={<ShoppingBagIcon fontSize="small" />}
+                      label="Tüm Müşteri Siparişleri"
+                      onClick={() => { setOpen(false); navigate("/admin", { state: { tab: 0 } }); }}
+                      primary={primary}
+                      softBg={softBg}
+                    />
+                    <MenuItem
+                      icon={<PersonIcon fontSize="small" />}
+                      label="Kullanıcı Yönetimi"
+                      onClick={() => { setOpen(false); navigate("/admin", { state: { tab: 1 } }); }}
+                      primary={primary}
+                      softBg={softBg}
+                    />
+                    <MenuItem
+                      icon={<HomeIcon fontSize="small" />}
+                      label="Ürün Yönetimi"
+                      onClick={() => { setOpen(false); navigate("/admin", { state: { tab: 2 } }); }}
+                      primary={primary}
+                      softBg={softBg}
+                    />
+                    <Divider sx={{ my: 1 }} />
+                    <Typography variant="caption" sx={{ px: 2, pt: 0.5, pb: 0.5, display: "block", color: "text.secondary", fontWeight: 700 }}>
+                      HESABIM
+                    </Typography>
+                  </>
+                )}
                 <MenuItem
                   icon={<PersonOutlineIcon fontSize="small" />}
                   label="Profil Bilgileri"

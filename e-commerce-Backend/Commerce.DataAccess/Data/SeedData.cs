@@ -11,6 +11,11 @@ public static class SeedData
         {
             await roleManager.CreateAsync(new ApplicationRole { Name = "Customer" });
             await roleManager.CreateAsync(new ApplicationRole { Name = "Admin" });
+            await roleManager.CreateAsync(new ApplicationRole { Name = "Worker" });
+        }
+        else if (!await roleManager.RoleExistsAsync("Worker"))
+        {
+            await roleManager.CreateAsync(new ApplicationRole { Name = "Worker" });
         }
 
         if (!userManager.Users.Any())
@@ -36,6 +41,23 @@ public static class SeedData
 
             await userManager.CreateAsync(admin, "Admin@2024");
             await userManager.AddToRoleAsync(admin, "Admin");
+        }
+
+        if (await userManager.FindByEmailAsync("can.demir@gmail.com") == null)
+        {
+            var worker = new ApplicationUser
+            {
+                FirstName = "Can",
+                LastName = "Demir",
+                UserName = "candemir",
+                Email = "can.demir@gmail.com"
+            };
+
+            var result = await userManager.CreateAsync(worker, "Worker@2024");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(worker, "Worker");
+            }
         }
     }
 }

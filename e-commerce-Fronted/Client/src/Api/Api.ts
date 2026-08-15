@@ -101,7 +101,29 @@ const queries = {
 const Catalog = {
   list: () => queries.get("Products"),
   product_Details: (id: number) => queries.get(`Products/${id}`),
-  Category_details: (id: number) => queries.get(`Products?categoryId=${id}`), // ✅ düzelt
+  Category_details: (id: number) => queries.get(`Products?categoryId=${id}`),
+  create: (data: {
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    imageUrl: string;
+    categoryIds: number[];
+  }) => queries.post("Products", data),
+  update: (id: number, data: {
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    imageUrl: string;
+    categoryIds: number[];
+  }) => queries.put(`Products/${id}`, data),
+  delete: (id: number) => queries.delete(`Products/${id}`),
+  uploadImage: (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return axios.post("Products/upload-image", formData).then((res) => res.data);
+  },
 };
 
 const Errors = {
@@ -157,6 +179,21 @@ const Orders = {
     fullAddress: string;
     shippingOption: string;
   }) => queries.post("Orders", data),
+  getAllOrders: () => queries.get("Orders/admin/all"),
+  updateOrderStatus: (id: number, status: string) =>
+    queries.put(`Orders/admin/${id}/status`, { status }),
+};
+
+const Admin = {
+  getUsers: () => queries.get("Admin/users"),
+  createUser: (data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    role: string;
+  }) => queries.post("Admin/users", data),
+  deleteUser: (userId: string) => queries.delete(`Admin/users/${userId}`),
 };
 
 const requests = {
@@ -167,6 +204,7 @@ const requests = {
   Account,
   Favorites,
   Orders,
+  Admin,
 };
 
 export default requests;

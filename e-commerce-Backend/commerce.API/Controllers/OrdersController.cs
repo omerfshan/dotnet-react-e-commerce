@@ -179,4 +179,58 @@ public class OrdersController : ControllerBase
 
         return Ok(result);
     }
+
+    [Authorize(Roles = "Admin,Worker")]
+    [HttpGet("admin/all")]
+    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllOrders()
+    {
+        var orders = await _context.Orders
+            .Include(o => o.OrderItems)
+            .OrderByDescending(o => o.OrderDate)
+            .ToListAsync();
+
+        var result = orders.Select(o => new OrderDto
+        {
+            Id = o.Id,
+            OrderNumber = o.OrderNumber,
+            OrderDate = o.OrderDate,
+            FirstName = o.FirstName,
+            LastName = o.LastName,
+            PhoneNumber = o.PhoneNumber,
+            AddressTitle = o.AddressTitle,
+            City = o.City,
+            FullAddress = o.FullAddress,
+            SubTotal = o.SubTotal,
+            ShippingFee = o.ShippingFee,
+            GrandTotal = o.GrandTotal,
+            Status = o.Status.ToString(),
+            OrderItems = o.OrderItems.Select(oi => new OrderItemDto
+            {
+                ProductId = oi.ProductId,
+                ProductName = oi.ProductName,
+                ProductImageUrl = oi.ProductImageUrl,
+                Price = oi.Price,
+                Quantity = oi.Quantity
+            }).ToList()
+        }).ToList();
+
+        return Ok(result);
+    }
+
+    [Authorize(Roles = "Admin,Worker")]
+    [HttpPut("admin/{id:int}/status")]
+    public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] UpdateOrderStatusDto dto)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null) return NotFound("Sipariş bulunamadı.");
+
+        if (Enum.TryParse<OrderStatus>(dto.Status, true, out var parsedStatus))
+        {
+            order.Status = parsedStatus;
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Sipariş durumu başarıyla güncellendi.", status = order.Status.ToString() });
+        }
+
+        return BadRequest("Geçersiz sipariş durumu.");
+    }
 }

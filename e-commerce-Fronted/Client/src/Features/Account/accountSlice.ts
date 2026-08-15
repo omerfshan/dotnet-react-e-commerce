@@ -8,6 +8,7 @@ export type User = {
   token: string;
   userName?: string;
   firstName?: string;
+  roles?: string[];
 };
 
 type AccountState = {

@@ -26,7 +26,8 @@ public class AuthService : IAuthService
         {
             Token = _tokenService.GenerateToken(user.Id, user.Email!, user.FirstName, user.LastName, roles),
             UserName = $"{user.FirstName} {user.LastName}",
-            FirstName = user.FirstName
+            FirstName = user.FirstName,
+            Roles = roles.ToList()
         };
     }
 
@@ -50,7 +51,8 @@ public class AuthService : IAuthService
         {
             Token = _tokenService.GenerateToken(user.Id, user.Email!, user.FirstName, user.LastName, roles),
             UserName = $"{user.FirstName} {user.LastName}",
-            FirstName = user.FirstName
+            FirstName = user.FirstName,
+            Roles = roles.ToList()
         };
     }
 

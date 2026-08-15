@@ -534,10 +534,15 @@ export default function ProfilePage() {
                           <Chip
                             label={
                               ord.status === "Processing" ? "Hazırlanıyor" :
-                              ord.status === "Shipped" ? "Kargoya Verildi" :
-                              ord.status === "Delivered" ? "Teslim Edildi" : "Alındı"
+                              ord.status === "Shipped" ? "Yolda / Kargoda" :
+                              ord.status === "Delivered" ? "Teslim Edildi" :
+                              ord.status === "Cancelled" ? "İptal Edildi" : "Sipariş Alındı"
                             }
-                            color={ord.status === "Delivered" ? "success" : "primary"}
+                            color={
+                              ord.status === "Delivered" ? "success" :
+                              ord.status === "Shipped" ? "info" :
+                              ord.status === "Cancelled" ? "error" : "warning"
+                            }
                             size="small"
                             sx={{ fontWeight: 700 }}
                           />
