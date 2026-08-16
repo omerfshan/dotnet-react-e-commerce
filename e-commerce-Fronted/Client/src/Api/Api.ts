@@ -64,7 +64,13 @@ axios.interceptors.response.use(
     switch (status) {
       case 401:
         localStorage.removeItem("user");
-        router.navigate("/unauthorized", { state: { error: data, status } });
+        import("../store/store").then(({ store }) => {
+          import("../Features/Account/accountSlice").then(({ logout }) => {
+            store.dispatch(logout());
+          });
+        });
+        toast.error("Oturum süreniz doldu. Lütfen tekrar giriş yapın.");
+        router.navigate("/login");
         break;
 
       case 404:

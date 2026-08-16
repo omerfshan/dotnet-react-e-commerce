@@ -43,7 +43,8 @@ public static class SeedData
             await userManager.AddToRoleAsync(admin, "Admin");
         }
 
-        if (await userManager.FindByEmailAsync("can.demir@gmail.com") == null)
+        var workerUser = await userManager.FindByEmailAsync("can.demir@gmail.com");
+        if (workerUser == null)
         {
             var worker = new ApplicationUser
             {
@@ -57,6 +58,15 @@ public static class SeedData
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(worker, "Worker");
+            }
+        }
+        else
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(workerUser);
+            await userManager.ResetPasswordAsync(workerUser, token, "Worker@2024");
+            if (!await userManager.IsInRoleAsync(workerUser, "Worker"))
+            {
+                await userManager.AddToRoleAsync(workerUser, "Worker");
             }
         }
     }
