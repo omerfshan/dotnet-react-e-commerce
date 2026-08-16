@@ -13,10 +13,13 @@ export default function ProductImage({ imageUrl, name }: Props) {
     <Box sx={{ bgcolor: colors.softBg }}>
       <CardMedia
         component="img"
-        height="200"
-        image={getImageUrl(imageUrl)} // DEĞİŞTİR
+        image={getImageUrl(imageUrl)}
         alt={name}
-        sx={{ objectFit: "contain", p: 2 }}
+        sx={{
+          height: { xs: 140, sm: 170, md: 200 },
+          objectFit: "contain",
+          p: { xs: 1, md: 2 }
+        }}
       />
     </Box>
   );

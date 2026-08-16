@@ -106,9 +106,9 @@ export default function FavoritesPage() {
           </Paper>
         ) : (
           /* Products Grid */
-          <Grid container spacing={3}>
+          <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>
             {favoriteItems.map((product) => (
-              <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2.4 }}>
+              <Grid key={product.id} size={{ xs: 6, sm: 4, md: 3, lg: 3 }}>
                 <ProductCard product={product} />
               </Grid>
             ))}
