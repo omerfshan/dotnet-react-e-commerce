@@ -16,6 +16,7 @@ import {
   Step,
   StepLabel,
   CircularProgress,
+  Stack,
 } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -28,6 +29,7 @@ import colors from "../../theme/color";
 import { toast } from "react-toastify";
 import requests from "../../Api/Api";
 import { clearCart } from "../../store/Slices/cartSlice";
+import { imageUrl } from "../../Api/config";
 
 const steps = ["Adres & Teslimat", "Ödeme Bilgileri", "Sipariş Onayı"];
 
@@ -374,11 +376,24 @@ export default function CheckoutPage() {
                       </RadioGroup>
                     </FormControl>
 
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+                    <Stack
+                      direction={{ xs: "column-reverse", sm: "row" }}
+                      justifyContent="space-between"
+                      alignItems="center"
+                      spacing={2}
+                      sx={{ mt: 4 }}
+                    >
                       <Button
+                        fullWidth
                         startIcon={<ArrowBackIcon />}
                         onClick={() => navigate("/cart")}
-                        sx={{ textTransform: "none", fontWeight: 700, color: "text.secondary" }}
+                        sx={{
+                          width: { xs: "100%", sm: "auto" },
+                          textTransform: "none",
+                          fontWeight: 700,
+                          color: "text.secondary",
+                          py: 1.2,
+                        }}
                       >
                         Sepete Dön
                       </Button>
@@ -386,10 +401,11 @@ export default function CheckoutPage() {
                         type="submit"
                         variant="contained"
                         sx={{
+                          width: { xs: "100%", sm: "auto" },
                           bgcolor: colors.primary,
                           borderRadius: 3,
                           px: 4,
-                          py: 1.2,
+                          py: 1.3,
                           fontWeight: 700,
                           textTransform: "none",
                           "&:hover": { bgcolor: colors.primaryHover },
@@ -397,7 +413,7 @@ export default function CheckoutPage() {
                       >
                         Ödeme Adımına Geç
                       </Button>
-                    </Box>
+                    </Stack>
                   </Box>
                 </Paper>
               )}
@@ -434,23 +450,23 @@ export default function CheckoutPage() {
                           inputProps={{ maxLength: 19 }}
                         />
                       </Grid>
-                      <Grid size={{ xs: 12, sm: 6 }}>
+                      <Grid size={{ xs: 6, sm: 6 }}>
                         <TextField
                           fullWidth
                           required
-                          label="Son Kullanma Tarihi (AA/YY)"
+                          label="Son Kullanma (AA/YY)"
                           value={expireDate}
                           onChange={(e) => setExpireDate(e.target.value)}
                           placeholder="12/28"
                           inputProps={{ maxLength: 5 }}
                         />
                       </Grid>
-                      <Grid size={{ xs: 12, sm: 6 }}>
+                      <Grid size={{ xs: 6, sm: 6 }}>
                         <TextField
                           fullWidth
                           required
                           type="password"
-                          label="CVV / Güvenlik Kodu"
+                          label="CVV / Güvenlik"
                           value={cvv}
                           onChange={(e) => setCvv(e.target.value)}
                           placeholder="123"
@@ -459,11 +475,24 @@ export default function CheckoutPage() {
                       </Grid>
                     </Grid>
 
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+                    <Stack
+                      direction={{ xs: "column-reverse", sm: "row" }}
+                      justifyContent="space-between"
+                      alignItems="center"
+                      spacing={2}
+                      sx={{ mt: 4 }}
+                    >
                       <Button
+                        fullWidth
                         startIcon={<ArrowBackIcon />}
                         onClick={() => setActiveStep(0)}
-                        sx={{ textTransform: "none", fontWeight: 700, color: "text.secondary" }}
+                        sx={{
+                          width: { xs: "100%", sm: "auto" },
+                          textTransform: "none",
+                          fontWeight: 700,
+                          color: "text.secondary",
+                          py: 1.2,
+                        }}
                       >
                         Adres Adımına Dön
                       </Button>
@@ -472,9 +501,10 @@ export default function CheckoutPage() {
                         variant="contained"
                         disabled={isSubmitting}
                         sx={{
+                          width: { xs: "100%", sm: "auto" },
                           bgcolor: colors.primary,
                           borderRadius: 3,
-                          px: 5,
+                          px: { xs: 3, sm: 5 },
                           py: 1.4,
                           fontWeight: 800,
                           fontSize: 16,
@@ -484,7 +514,7 @@ export default function CheckoutPage() {
                       >
                         {isSubmitting ? <CircularProgress size={24} color="inherit" /> : `Ödemeyi Yap (${grandTotal.toLocaleString("tr-TR")} TL)`}
                       </Button>
-                    </Box>
+                    </Stack>
                   </Box>
                 </Paper>
               )}
@@ -502,7 +532,7 @@ export default function CheckoutPage() {
                     <Box key={item.productId} sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
                       <Box
                         component="img"
-                        src={`http://localhost:5232/images/${item.imageUrl}`}
+                        src={imageUrl(item.imageUrl)}
                         onError={(e: any) => { e.target.src = "/images/placeholder.jpg"; }}
                         sx={{ width: 48, height: 48, borderRadius: 2, objectFit: "cover" }}
                       />
