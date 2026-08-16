@@ -1,6 +1,8 @@
-**/ecommerce.db
 **/bin
 **/obj
 **/node_modules
+**/dist
 .git
 .gitignore
+.DS_Store
+*.log

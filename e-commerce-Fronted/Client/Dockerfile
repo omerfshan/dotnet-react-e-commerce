@@ -11,6 +11,10 @@ RUN npm ci
 # Tüm kaynak kodu kopyala
 COPY . .
 
+# API URL ortam değişkeni (Build zamanı)
+ARG VITE_API_URL=http://localhost:5232
+ENV VITE_API_URL=$VITE_API_URL
+
 # Projeyi derle (dist klasörü oluşur)
 RUN npm run build
 
@@ -21,7 +25,7 @@ WORKDIR /usr/share/nginx/html
 # Build aşamasından çıkan dist klasörünü Nginx'in sunacağı yere kopyala
 COPY --from=build /app/dist .
 
-# Özel nginx ayar dosyasını kopyala (SPA routing için önemli)
+# Özel nginx ayar dosyasını kopyala (SPA routing & reverse proxy)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

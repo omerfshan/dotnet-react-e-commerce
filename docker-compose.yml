@@ -1,0 +1,37 @@
+services:
+  backend:
+    build:
+      context: ./e-commerce-Backend
+      dockerfile: Dockerfile
+    container_name: nova-backend
+    restart: unless-stopped
+    ports:
+      - "5232:5232"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5232
+    volumes:
+      - ./e-commerce-Backend/commerce.API/ecommerce.db:/app/ecommerce.db
+      - ./e-commerce-Backend/commerce.API/wwwroot:/app/wwwroot
+    networks:
+      - nova-network
+
+  frontend:
+    build:
+      context: ./e-commerce-Fronted/Client
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:5232
+    container_name: nova-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - nova-network
+
+networks:
+  nova-network:
+    driver: bridge
